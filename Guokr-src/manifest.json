@@ -1,0 +1,28 @@
+{
+  
+  "name": "Guokr功能扩展",
+  "description": "扩展果壳网的表情系统，可以右键添加其他网页上的图片作为果壳网的表情",
+  "version": "0.1",
+  "content_scripts": [
+    {
+      "matches": ["http://*.guokr.com/*","https://*.guokr.com/*"],
+      "js": ["js/main.js"],
+      "run_at":"document_idle"
+    }],
+   "background":{
+    "scripts": ["js/background.js"]},
+  "permissions": [
+      "contextMenus",
+       "storage",
+      "http://*.guokr.com/*",
+      "https://*.guokr.com/*"
+      
+  ],
+  "icons": {
+    "16": "icon/icon_16.png",
+    "48": "icon/icon_48.png",
+    "64": "icon/icon_64.png",
+    "128": "icon/icon_128.png"
+  },
+  "manifest_version": 2
+}
