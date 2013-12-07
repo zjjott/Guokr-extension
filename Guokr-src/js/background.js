@@ -3,70 +3,83 @@
 // found in the LICENSE file.
 // A generic onclick callback function.
 
-var ifchanged = false;
-//端口监听器
+//开启/关闭日志输出
+var debugMode = true;
 
-chrome.runtime.onConnect.addListener(function(port) {
-  //消息通道，reload的监听器在main.js
-  if(port.name == "msg"){
-    port.onMessage.addListener(function(msg) {
-      if (msg.set){
-          //request.data是一个键值对object
-          chrome.storage.local.set(msg.set,function(){
-            port.postMessage({ok: true});  
-          });
-      }
-      if (msg.get){
-          chrome.storage.local.get(msg.get,function (items) {
-            if (!items[msg.get]) 
-              var data ="";
-            else
-              var data=items[msg.get];
-            port.postMessage({data:data,key:msg.get,ok:true});
-          });
-      };
-    });
-  }
-  if (port.name == "reload") {
-    port.onMessage.addListener(function(msg){
-      //收到询问是否需要重载的链接，直接返回
-      
-      if (msg.ping) {
-        console.log("服务器收到询问");
-        port.postMessage({reload:ifchanged});
-        ifchanged=false;
-      };
-    });
-  };
-});
-
-chrome.storage.onChanged.addListener(function(changes, namespace) {
-    if ("gkr-user-favfaces" in changes) {
-        console.log("监听到存储改变事件");
-        ifchanged = true;
-    }
-});
-
-function addFaceToStorage(info, tab) {
-  chrome.storage.local.get("gkr-user-favfaces", function(items) {
-        var store = items;        
-        if(!store["gkr-user-favfaces"]){
-            var json = '{"gkr-user-favfaces":"'+info.srcUrl+'"}';
-            store = JSON && JSON.parse(json)||$.parseJSON(json);
-        }
-        else
-        {
-          store["gkr-user-favfaces"]+="\n"+info.srcUrl;
-        }
-        chrome.storage.local.set(store);
-        console.log(store); 
-    });
-}
-function cleanStorage(){
-  chrome.storage.local.clear(function(){
-    alert("所有表情已删除");
+//消息发送
+function sendMsgToContent(title,msg,callback){
+  chrome.tabs.query({url: "http://*.guokr.com/*"}, function(tabs) {
+    for (var i=0;i<tabs.length;i++) {
+      var o = new Object();
+      o[title]=msg;
+      chrome.tabs.sendMessage(tabs[i].id, o, callback);
+    };
   });
 }
+
+//消息处理
+var handler = {
+    setItem : function(data) {
+        log(data);
+        for(var key in data){
+            localStorage.setItem(key,data[key]);    
+        }
+    },
+    getItemArray : function(data, sender, sendResponse) {
+        var o = {};
+        for(var i=0;i<data.length;i++){
+          var key = data[i];
+          o[key] = localStorage.getItem(key);
+        }
+        sendResponse(o);
+    }
+}
+
+//消息接收
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    for(var title in request){
+      log(request);
+      handler[title](request[title], sender, sendResponse);
+    }
+  }
+);
+
+
+
+function store(key, value) {
+  if (value) {//存储,发set消息
+      localStorage.setItem(key, encodeURIComponent(value));
+
+      var obj = {};
+      obj[key] = encodeURIComponent(value);
+      //存储,发消息同步content页面的localStorage
+      sendMsgToContent("storageUpdate",obj);
+  }
+  else//读取，发get消息
+  {
+      var rtnValue = localStorage.getItem(key);
+      try{
+          return rtnValue ? decodeURIComponent(rtnValue) : "";
+      }catch(e){return "";}
+  }
+}
+
+//调试
+function log(info){
+    if(!debugMode){return;}
+    if(console){console.log(info); }
+}
+
+function addFaceToStorage(info, tab) {
+  store("gkr-user-favfaces",store("gkr-user-favfaces")+"\n"+info.srcUrl);
+}
+
+function cleanStorage(){
+  store("gkr-user-favfaces","\n");
+  alert("所有表情已删除");
+}
+
 chrome.contextMenus.create({"title": "添加进收藏表情", 
                             "contexts":["image"],
                             "onclick": addFaceToStorage
