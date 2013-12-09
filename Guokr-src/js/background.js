@@ -75,20 +75,8 @@ function addFaceToStorage(info, tab) {
   store("gkr-user-favfaces",store("gkr-user-favfaces")+"\n"+info.srcUrl);
 }
 
-function cleanStorage(){
-  var r = confirm("确定删除收藏表情么？该操作不可恢复\n只会删除从右键添加的表情");
-  if(r == true){
-    store("gkr-user-favfaces","\n");
-    alert("所有表情已删除");
-  }
-  
-}
 
 chrome.contextMenus.create({"title": "添加进收藏表情", 
                             "contexts":["image"],
                             "onclick": addFaceToStorage
-                              });
-chrome.contextMenus.create({"title": "删除所有收藏表情",
-                            "contexts":["page"],
-                            "onclick": cleanStorage
                               });
