@@ -375,11 +375,13 @@
             <s id="gkr-groups-triangle" class="triangle" style="border-width: 8px;border-color:transparent transparent #85c155 transparent; border-style:dashed dashed solid dashed;position: absolute;left: 160px;top: -15px;"/>\
             <div id="gkr-groups-div" style="background-color:white; border-color:#85c155; border-style:solid; border-width:1px;padding:2px;width:310px;">\
                <ul id="gkr-groups-searchfav-ul" style="height: 22px;border-width:1px;border-style:none none solid none;border-color:transparent transparent #85c155 transparent;">\
-                   <li style="float:left;width:95px;height:22px;"><input type="text" id="gkr-groups-searchbox" maxlength=8 placeholder="快速搜索" style="width:90px;"/></li>\
+                   <li style="float:left;width:95px;height:22px;">\
+                   <input type="text" id="gkr-groups-searchbox" placeholder="快速搜索" style="width:90px;"/>\
+                   </li>\
                </ul>\
                <ul id="gkr-groups-ul"/>\
             </div>\
-        </div>'                                                                                                                                          
+        </div>'  
         ).hover(function(){
             clearTimeout(showGroupTimer);
         },function(){
@@ -408,8 +410,10 @@
             },400);
         });
         
+        var maxGroupName = 12;
         //快速搜索
-        $("#gkr-groups-searchbox").keyup(function(){
+        $("#gkr-groups-searchbox").attr('maxlength',maxGroupName) // 输入框最大输入大小限制在12内
+            .keyup(function(){
             var searchText = $(this).val().toLowerCase();
             var reg = new RegExp("^" + searchText);
             $("#gkr-groups-ul").children().each(function(i,n){
@@ -434,10 +438,11 @@
         getGroups(function(data){
             $.each(data,function(i,n){
                     var groupName = n;
-                    if(groupName.length > 7 && !/([a-zA-Z]|\s|\d|!)+/.test(n)){//长度超过7 又不包含英文的截断
-                        groupName = groupName.substr(0,6) + "…";
+                    if(groupName.length > maxGroupName ){
+                        groupName = groupName.substr(0,maxGroupName - 1) + "…";
                     }
-                    $("<li style='float:left;width:95px;height:22px;' pinyin='" + Pinyin.get(n.replace(/\s|\d|!/g,"")) + "'><a href='" + i + "' title='"+ n +"'>" + groupName + "</a></li>").appendTo("#gkr-groups-ul");
+                    $("<li style='float:left;width:95px;height:22px;' pinyin='" + Pinyin.get(n.replace(/\s|\d|!/g,"")) + "'><a href='" + i + "' title='"+ n +"'>" + groupName + "</a></li>")
+                        .appendTo("#gkr-groups-ul");
             });
         });
         
@@ -492,7 +497,7 @@
                     $("#gkr-hover-box:visible").fadeOut("fast");
                 },800);
             });
-            
+
             //功能按钮
             if($("div.edui-toolbar[addFaceDone!='true']").length > 0){
                 var toolBar = $($("div.edui-toolbar[addFaceDone!='true']")[0]);
