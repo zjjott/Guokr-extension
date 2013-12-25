@@ -1,0 +1,47 @@
+body{
+  color:#444;
+  font-family:Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman',
+              "Hiragino Sans GB", "STXihei", "微软雅黑", serif;
+  font-size:12px;
+  line-height:1.5em;
+  background:#fefefe;
+  width: 510px;
+  margin: 10px auto;
+  padding: 1em;
+  outline: 1300px solid #FAFAFA;
+}
+
+.content {
+  width: 500px;
+}
+input {
+    margin-bottom: 12px;
+padding: 3px;
+width: 500px;
+height: 20px;
+border: 1px solid #DDD;
+}
+
+.gfr {
+float: right;
+font-size: 12px;
+
+}
+
+.message {
+    color:red;
+}
+
+
+button {
+    display: inline-block;
+height: 29px;
+line-height: 29px;
+background: #88c932;
+padding: 0 5px;
+border: 0;
+color: #FFF;
+font-size: 14px;
+font-family: "Microsoft YaHei","WenQuanYi Micro Hei",SimHei,tahoma,sans-serif;
+text-decoration: none;
+}

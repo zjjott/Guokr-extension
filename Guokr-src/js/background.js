@@ -10,10 +10,10 @@ var debugMode = true;
 function sendMsgToContent(title,msg,callback){
   chrome.tabs.query({url: "http://*.guokr.com/*"}, function(tabs) {
     for (var i=0;i<tabs.length;i++) {
-      var o = new Object();
+      var o = {};
       o[title]=msg;
       chrome.tabs.sendMessage(tabs[i].id, o, callback);
-    };
+    }
   });
 }
 
@@ -22,7 +22,7 @@ var handler = {
     setItem : function(data) {
         log(data);
         for(var key in data){
-            localStorage.setItem(key,data[key]);    
+            localStorage.setItem(key,data[key]);
         }
     },
     getItemArray : function(data, sender, sendResponse) {
@@ -33,7 +33,7 @@ var handler = {
         }
         sendResponse(o);
     }
-}
+};
 
 //消息接收
 chrome.runtime.onMessage.addListener(
@@ -76,7 +76,7 @@ function addFaceToStorage(info, tab) {
 }
 
 
-chrome.contextMenus.create({"title": "添加进收藏表情", 
+chrome.contextMenus.create({"title": "添加进收藏表情",
                             "contexts":["image"],
                             "onclick": addFaceToStorage
                               });

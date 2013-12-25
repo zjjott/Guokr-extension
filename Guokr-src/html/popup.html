@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head>
+  <meta charset="UTF-8">
+    <title>添加到果篮</title>
+    <link rel="stylesheet" href="../css/popup.css">
+
+    <script type="text/template" id="loginTemplate">
+        <div class="login">
+            <a target="_blank" href="http://www.guokr.com/sso/?suppress_prompt=1&lazy=y&success=http%3A%2F%2Fwww.guokr.com%2F">login</a>
+        </div>
+    </script>
+    <script type="text/template" id="basketTemplate">
+    <option value={0}>{1}</option>
+    </script>
+  </head>
+  <body>
+  <div class="container">                                  
+      <h4 class="gui-block-hd">
+          <span id="blockTitle">添加到果篮</span>
+      </h4>
+         <div id="blockWindow" class="gui-block">
+      <div class="gui-block-b">
+
+        <div id="blockContent" class="gui-block-bd">
+        <label for="basket-box">标题<span>(必填)</span></label>
+          <div class="basket-box" id="basketBox">
+            <textarea rows="3" class="basket-text"></textarea>
+            
+          </div>
+        <label for="baskets">选择果篮</label>
+        <div class="baskets">
+          <div class="basket-box-footer">
+              <a href="new.html" id="createBasketBtn" class="gfr">创建新果篮</a>
+              <button class="add">添加</button><span class="warn"></span>
+          </div>
+        
+        </div>
+
+        </div>
+        
+      </div>
+    </div>
+  </div>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/popup.js"></script>
+  </body>
+</html>
+

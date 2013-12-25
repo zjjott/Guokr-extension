@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+  <meta charset="UTF-8">
+    <title>新建果篮</title>
+    <link rel="stylesheet" href="../css/popup.css">
+    <script type="text/template" id="loginTemplate">
+        <div class="login">
+            <a target="_blank" href="http://www.guokr.com/sso/?suppress_prompt=1&lazy=y&success=http%3A%2F%2Fwww.guokr.com%2F">login</a>
+        </div>
+    </script>
+    <script type="text/template" id="basketTemplate">
+    <option value={0}>{1}</option>
+    </script>
+    <script type="text/template" id="message">
+    <a class="warn">{1}</a>
+    </script>
+  </head>
+  <body>
+  <div class="container">                                  
+      <h4 class="gui-block-hd">
+          <span id="blockTitle">新建果篮</span>
+      </h4>
+      <div id="blockWindow" class="gui-block">
+        <div class="gui-block-b">
+          <div id="blockContent" class="gui-block-bd">
+            <div class="new-basket-box">
+              <label for="basketTitle">标题<span class="new-basket-tip">(必填)</span></label>
+              <div id="basketTitle">
+              <input type="text">
+              </div>
+              <label for="basketDescrip">
+              描述</label>
+              <div id="basketDescrip">
+              <textarea></textarea>
+              </div>
+              <label for="basketCategory">分类</label>
+              <div id="basketCategory" class="gselect">
+              </div>
+              <span class="basket-form-tip" id="basketCategoryTip"></span>
+              <button class="create">创建</button><span class="warn"></span><a href="popup.html" class="gfr">返回</a>
+            </div>
+
+          </div>
+          
+        </div>
+    </div>
+  </div>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/new.js"></script>
+  </body>
+</html>
+
