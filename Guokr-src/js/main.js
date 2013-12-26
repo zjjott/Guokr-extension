@@ -477,7 +477,6 @@
                 clearTimeout(outTimer);
                 hoverTimer = setTimeout(function(){
                     var id = parent.attr("href").toString().replace("http://www.guokr.com/i/","").replace(/\//g,"");
-                    $("#gkr-hover-msg").attr("href","/user/messages/" + id + "/");
                     $("#gkr-hover-box").hide().data("userId",id);
                     $("#gkr-hover-link").attr("href",parent.attr("href")).html(parent.text()+parent.attr("title"));
                     $("#gkr-hover-link:empty").html(parent.next(".lu_txt").text() + $(".post_user").text());
