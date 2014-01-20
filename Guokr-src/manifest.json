@@ -6,7 +6,7 @@
   "content_scripts": [
     {
       "matches": ["http://*.guokr.com/*","https://*.guokr.com/*"],
-      "js": ["js/main.js"],
+      "js": ["js/externLinks.js","js/PinyinDict.js","js/main.js"],
       "run_at":"document_idle"
     }],
    "background":{
