@@ -1,3 +1,5 @@
+//外链
+
 var Faces = {
 	//默认表情列表
 	defaultFaces : [
