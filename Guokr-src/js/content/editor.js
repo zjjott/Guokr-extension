@@ -1,7 +1,7 @@
 //编辑框增强，现在包括颜色选择器按钮和表情按钮
-
+var Editor = {};
 //表情悬浮框
-function addFacesBox(){
+Editor.addFacesBox = function(){
     $('<div id="gkr-faces-box" style="font-size:12px;display:none;position:absolute;width:310px;z-index:9999;">\
         <s id="gkr-faces-triangle" class="triangle" style="border-width: 8px;border-color:#2AA4CE transparent transparent transparent; border-style:solid dashed dashed dashed;position: absolute;left: 20px;top: 164px;"/>\
         <div id="gkr-faces-div" style="background-color:white; border-color:#2AA4CE; border-style:solid; border-width:1px;padding:0px;width:310px;">\
@@ -13,14 +13,15 @@ function addFacesBox(){
 }
 
 //表情预览悬浮框
-function addFacesPreviousBox(){
+Editor.addFacesPreviousBox = function(){
     $('<div id="gkr-preview-box" style="display:none;position:absolute;height:64px;width:64px;z-index:9999;">\
         <div id="gkr-preview-div" style="background-color:white;background-size:64px 64px;background-position:0px 0px; border-color:#2AA4CE; border-style:solid; border-width:1px;padding:0px;height:64px;width:64px;"/>\
     </div>'
     ).appendTo($(document.body).children(".container"));
 }
+
 //颜色选择器悬浮框
-function addColorPicker(){
+Editor.addColorPicker = function(){
     $('<div id="gkr-color-box" style="position:absolute; display:none; width:185px; height:160px;z-index:9999;">\
         <s id="gkr-color-triangle" class="triangle" style="border-width: 8px;border-color:#2AA4CE transparent transparent transparent; border-style:solid dashed dashed dashed;position: absolute;left: 20px;top: 145px;"/>\
         <div id="gkr-color-div" style="background-color:white; border-color:#2AA4CE; border-style:solid; border-width:1px;height:143px;"/>\
@@ -33,11 +34,11 @@ function addColorPicker(){
 function getViewObject(){
     var iframe = $(".edui-editor iframe:visible");
     if(iframe.length == 0){return null;}
-    return iframe.attr("contentDocument");
+    return iframe.prop("contentDocument"); // for jQuery 1.6+
 }
 
 //加入表情
-function addFace(url) {
+ function addFace(url) {
     var $view = getViewObject();
     if($view){
         try{

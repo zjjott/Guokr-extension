@@ -37,9 +37,47 @@ Pinyin.get = function(l1){
     return I1; 
 };
 
-function addGroupsMenu(){
-    
-        
+var HoverMenu = {};
+//小组菜单悬浮框
+HoverMenu.addGroupsMenu = function(){
+	$('<div id="gkr-groups-menu" style="font-size:12px;display:none;position:absolute;width:330px;z-index:9999;">\
+		<s id="gkr-groups-triangle" class="triangle" style="border-width: 8px;border-color:transparent transparent #85c155 transparent; border-style:dashed dashed solid dashed;position: absolute;left: 160px;top: -15px;"/>\
+		<div id="gkr-groups-div" style="background-color:white; border-color:#85c155; border-style:solid; border-width:1px;padding:2px;width:310px;">\
+		   <ul id="gkr-groups-searchfav-ul" style="height: 22px;border-width:1px;border-style:none none solid none;border-color:transparent transparent #85c155 transparent;">\
+			   <li style="float:left;width:95px;height:22px;"><input type="text" id="gkr-groups-searchbox" maxlength=8 placeholder="快速搜索" style="width:90px;"/></li>\
+		   </ul>\
+		   <ul id="gkr-groups-ul"/>\
+		</div>\
+	</div>'                                                                                                                                          
+	).hover(function(){
+		clearTimeout(showGroupTimer);
+	},function(){
+		showGroupTimer = setTimeout(function(){
+			$("#gkr-groups-menu").show().hide();
+		},400);
+	}).appendTo($(document.body).children(".container"));     
+}
+
+//追加小组菜单
+HoverMenu.showGroupsMenu = function(){
+	$("ul.gh-nav a[href='http://www.guokr.com/group/user/recent_replies/']").hover(function(){
+		clearTimeout(showGroupTimer);
+		var groupLink = $(this);
+		var rowLength = 5;
+		var groups = $("#gkr-groups-ul").children().length;
+		var grouprows = (groups/rowLength > (parseInt(groups/rowLength,10))) ? (parseInt(groups/rowLength,10) + 1) : (parseInt(groups/rowLength,10));
+		$("#gkr-groups-menu").show().css("width",(rowLength * 95) + 2)
+		.css("top",groupLink.offset().top + groupLink.height() + 23)
+		.css("left",groupLink.offset().left - 145);//首页位置修正
+		//.children("#gkr-groups-triangle").css("left",100-70+3).css("top",grouprows*22 + 22);
+		$("#gkr-groups-div").css("width",(rowLength * 95) + 5)
+		$("#gkr-groups-ul").css("height",grouprows*22 +5);
+		$("#gkr-groups-searchfav-ul").css("height",1*22);
+	},function(){
+		showGroupTimer = setTimeout(function(){
+			$("#gkr-groups-menu").show().hide();
+		},400);
+	});
 }
 
 //获取全部小组
@@ -77,4 +115,37 @@ function getGroups(callback){
         groups = new Object();
         fetchGroups(selfHomepage + "groups/");
     }
+}
+
+//快速搜索
+HoverMenu.searchGroups = function(){
+	$("#gkr-groups-searchbox").keyup(function(){
+		var searchText = $(this).val().toLowerCase();
+		var reg = new RegExp("^" + searchText);
+		$("#gkr-groups-ul").children().each(function(i,n){
+			var pyLetters = $(n).attr("pinyin");
+			var pyLettersLower = pyLetters.toLowerCase();
+			var shortLetters = pyLetters.replace(/[a-z]+/g,"").toLowerCase();
+			var fullName = $(n).children("a").attr("title").toLowerCase();
+			if(!reg.test(pyLettersLower) && !reg.test(shortLetters) && !reg.test(fullName)){
+				$(n).hide();
+			}else{
+				$(n).show();
+			}
+		});
+	});
+}
+
+//获取全部小组
+HoverMenu.addGroupsName = function(){
+	getGroups(function(data){
+		$.each(data,function(i,n){
+				var groupName = n;
+				if(groupName.length > 7 && !/([a-zA-Z]|\s|\d|!)+/.test(n)){//长度超过7 又不包含英文的截断
+					groupName = groupName.substr(0,6) + "…";
+				}
+				$("<li style='float:left;width:95px;height:22px;' pinyin='" + Pinyin.get(n.replace(/\s|\d|!/g,"")) + "'>\
+				<a href='" + i + "' title='"+ n +"'>" + groupName + "</a></li>").appendTo("#gkr-groups-ul");
+		});
+	});
 }
