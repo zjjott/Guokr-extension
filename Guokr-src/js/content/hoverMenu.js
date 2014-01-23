@@ -117,9 +117,11 @@ function getGroups(callback){
     }
 }
 
+HoverMenu.maxGroupName = 10;
 //快速搜索
 HoverMenu.searchGroups = function(){
-	$("#gkr-groups-searchbox").keyup(function(){
+	$("#gkr-groups-searchbox").attr('maxlength',HoverMenu.maxGroupName) // 输入框最大输入大小限制在12内
+	.keyup(function(){
 		var searchText = $(this).val().toLowerCase();
 		var reg = new RegExp("^" + searchText);
 		$("#gkr-groups-ul").children().each(function(i,n){
@@ -141,8 +143,12 @@ HoverMenu.addGroupsName = function(){
 	getGroups(function(data){
 		$.each(data,function(i,n){
 				var groupName = n;
-				if(groupName.length > 7 && !/([a-zA-Z]|\s|\d|!)+/.test(n)){//长度超过7 又不包含英文的截断
-					groupName = groupName.substr(0,6) + "…";
+				var shortCharLength = 0;
+				if ( groupName.match(/([a-zA-Z!?,.]|\d|\s)+/g) ) {
+					shortCharLength = groupName.match(/([a-zA-Z!?,.]|\d|\s)+/g).join('').length;
+				};
+				if(groupName.length - shortCharLength * 1/4 > HoverMenu.maxGroupName){ // 非汉语字符算3/4个
+					groupName = groupName.substr(0,HoverMenu.maxGroupName - 1) + "…";
 				}
 				$("<li style='float:left;width:95px;height:22px;' pinyin='" + Pinyin.get(n.replace(/\s|\d|!/g,"")) + "'>\
 				<a href='" + i + "' title='"+ n +"'>" + groupName + "</a></li>").appendTo("#gkr-groups-ul");
