@@ -120,7 +120,7 @@ function getGroups(callback){
 HoverMenu.maxGroupName = 10;
 //快速搜索
 HoverMenu.searchGroups = function(){
-	$("#gkr-groups-searchbox").attr('maxlength',HoverMenu.maxGroupName) // 输入框最大输入大小限制在12内
+	$("#gkr-groups-searchbox").attr('maxlength',HoverMenu.maxGroupName) // 输入框最大输入大小限制在10内
 	.keyup(function(){
 		var searchText = $(this).val().toLowerCase();
 		var reg = new RegExp("^" + searchText);
