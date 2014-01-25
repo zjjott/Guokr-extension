@@ -154,7 +154,7 @@
     };
 
     var Logger = function () {
-        this.level = Level.DEBUG;
+        this.level = Level.WARN;
     };
     Logger.prototype = {
         log: function (level, msg) {
