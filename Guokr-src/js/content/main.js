@@ -254,41 +254,21 @@ function domChanged() {
 }
 
 
-(function() {   
-    //消息处理
-    var handler = {
-        storageUpdate : function(data) {
-            log("storageUpdating");
-            log(data);
-            for(var key in data){
-                //localStorage.setItem(key,data[key]);
-                if(key == "gkr-user-favfaces"){
-                    reloadFace();
-                }
+(function() {
+    
+    //收藏表情发生变化时reload
+    chrome.storage.onChanged.addListener(function(changes, namespace) {
+        for(var key in changes){
+            if(key == "gkr-user-favfaces"){
+                reloadFace();
             }
         }
-    }
-
-    //消息接收
-    chrome.runtime.onMessage.addListener(
-      function(request, sender, sendResponse) {
-        for(var title in request){
-          handler[title](request[title], sender, sendResponse);
-        }
-      }
-    );
+	});
         
-    //备份
+    // 备份
     $.each(Faces.defaultMoreFaces[Faces.defaultMoreFaces.length-1].faces,
         function(i,n){
             favFaces.push(n);
-    });
-
-    //需要从background载入的数据
-    sendMsg("getItemArray", ["gkr-user-favfaces"], function(data){
-        for(var key in data){
-            localStorage.setItem(key,data[key]);
-        }
     });
     
     //判断是否Opera JS模式
@@ -299,6 +279,7 @@ function domChanged() {
         contentLoaded();
     }
 
+    //重新加载我的收藏表情列表
     function reloadFace () {
         var asyncfunc = eval(Wind.compile("async", function () {
             var result = $await(asyncstore("gkr-user-favfaces"));
@@ -316,8 +297,19 @@ function domChanged() {
 
     //页面载入
     function contentLoaded() {
-        //如果是第一次初始化载入默认表情
-        var asyncfunc1 = eval(Wind.compile("async", function () {
+        
+        var asyncfunc = eval(Wind.compile("async", function () {
+            //如果localStorage中有旧版插件的数据,则将数据迁移到chrome.storage中
+            if(store("gkr-user-defaultfaces") || store("gkr-user-groups")){
+                var localStorageKeys = ["gkr-user-favfaces","gkr-user-defaultfaces","gkr-user-groups","gkr-user-groups-chktime","gkr-user-notes","ids","strs"];
+                for(var i=0;i<localStorageKeys.length;i++){
+                    var key = localStorageKeys[i];
+                    $await(asyncstore(key,store(key)));
+                    localStorage.removeItem(key);
+                }
+            }
+            
+            //如果是第一次初始化载入默认表情
             var defaultfaces = $await(asyncstore("gkr-user-defaultfaces"));
             if(!defaultfaces){
                 defaultfaces = Faces.defaultFaces.join("\n");
@@ -333,11 +325,8 @@ function domChanged() {
                     }
                 });
             }
-        }));
-        asyncfunc1().start();
-        
-        //初始化收藏表情列表
-        var asyncfunc2 = eval(Wind.compile("async", function () {
+            
+            //初始化收藏表情列表
             var favfaces = $await(asyncstore("gkr-user-favfaces"));
             if(favfaces && $.trim(favfaces)){
                 var facesdata = favfaces.split("\n");
@@ -349,7 +338,7 @@ function domChanged() {
                 });
             }
         }));
-        asyncfunc2().start();
+        asyncfunc().start();
         
         //如果是个人设置页面右侧追加配置项
         if (window.location.href == setHref) {
@@ -383,8 +372,10 @@ function domChanged() {
             
             //重置自定义表情数据
             $("#reset-user-faces").click(function(){
-                chrome.storage.local.remove("gkr-user-favfaces");
-                chrome.storage.local.remove("gkr-user-defaultfaces");
+                if (confirm("确定要重置自定义表情数据？您的自定义表情可能会丢失！")) {
+                    chrome.storage.local.remove("gkr-user-favfaces");
+                    chrome.storage.local.remove("gkr-user-defaultfaces");
+                }
             });
             
             //关键词Add按钮

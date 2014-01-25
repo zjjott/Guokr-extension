@@ -37,15 +37,8 @@ var colors = ["ffffff","ffccc9","ffce93","fffc9e","ffffc7","9aff99","96fffb","cd
 
 //--------Util--------
 function store(key, value) {
-    if (value) {//存储,发setItem消息
-        localStorage.setItem(key, encodeURIComponent(value));
-
-        var obj = {};
-        obj[key] = encodeURIComponent(value);
-        sendMsg("setItem",obj,function(){});
-        
-        //重构用TEMP代码,完成后需要删掉
-        chrome.storage.local.set(obj, function() {});
+    if (value) {//存储
+        console.warn("store func is deprecated!!!");
     }
     else {//读取
         var rtnValue = localStorage.getItem(key);
@@ -55,7 +48,6 @@ function store(key, value) {
     }
 }
 
-/////////////------------------------------------------
 var asyncstore = function(key, value) {
 	if (value) {// 异步存储
         var obj = {};
@@ -78,13 +70,15 @@ var asyncstore = function(key, value) {
 		//var rtnValue = localStorage.getItem(key);
 	}
 }
-/////////////Invocation
+/////////////Sample of Invocation
+/**
 var waitForResult = eval(Wind.compile("async", function () {
     var result = $await(asyncstore(obj));
     log(result);
 }));
-//waitForResult().start();
-/////////////------------------------------------------
+waitForResult().start();
+*/
+/////////////
 
 // 简单json处理
 function obj2json(o){
@@ -109,13 +103,6 @@ function json2obj(s){
 function log(info){
     if(!debugMode){return;}
     if(console){console.log(info); }
-}
-
-//消息发送
-function sendMsg(title,msg,callback){
-    var o = new Object();
-    o[title]=msg;
-    chrome.runtime.sendMessage(o,callback);
 }
 
 //--------Util-End-------
