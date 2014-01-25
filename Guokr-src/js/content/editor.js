@@ -2,9 +2,9 @@
 var Editor = {};
 //表情悬浮框
 Editor.addFacesBox = function(){
-    $('<div id="gkr-faces-box" style="font-size:12px;display:none;position:absolute;width:310px;z-index:9999;">\
+    $('<div id="gkr-faces-box" style="font-size:12px;display:none;position:absolute;width:338px;z-index:9999;">\
         <s id="gkr-faces-triangle" class="triangle" style="border-width: 8px;border-color:#2AA4CE transparent transparent transparent; border-style:solid dashed dashed dashed;position: absolute;left: 20px;top: 164px;"/>\
-        <div id="gkr-faces-div" style="background-color:white; border-color:#2AA4CE; border-style:solid; border-width:1px;padding:0px;width:310px;">\
+        <div id="gkr-faces-div" style="background-color:white; border-color:#2AA4CE; border-style:solid; border-width:1px;padding:0px;width:338px;">\
             <ul id="gkr-faces-groups-ul" style="height: 22px;border-width:1px;border-style:none none solid none;border-color:transparent transparent #2AA4CE transparent;"/>\
             <ul id="gkr-faces-ul"/>\
         </div>\

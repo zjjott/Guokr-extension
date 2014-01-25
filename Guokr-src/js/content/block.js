@@ -35,10 +35,10 @@ function removeBlocked(a, s) {
 }
 
 //屏蔽处理,因为需要调用domChanged()，所以需要处于同一作用域
-        function addBlocked(a, s) {
-            if (!s) return;
-            var arr = store(a).split(",");
-            arr.push(s);
-            store(a, arr);
-            domChanged();
-        }
+function addBlocked(a, s) {
+    if (!s) return;
+    var arr = store(a).split(",");
+    arr.push(s);
+    store(a, arr);
+    domChanged();
+}
