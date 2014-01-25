@@ -65,6 +65,7 @@ function store(key, value) {
   }
 }
 
+
 //调试
 function log(info){
     if(!debugMode){return;}
@@ -72,7 +73,20 @@ function log(info){
 }
 
 function addFaceToStorage(info, tab) {
-  store("gkr-user-favfaces",store("gkr-user-favfaces")+"\n"+info.srcUrl);
+    var key ="gkr-user-favfaces";
+    chrome.storage.local.get(key, function(data) {
+        //get
+        var favfaces = ""; 
+        try {favfaces = (data[key] ? decodeURIComponent(data[key]) : "");} catch (e) {}
+        
+        //set
+        var obj = {};
+        obj[key] = encodeURIComponent(favfaces+"\n"+info.srcUrl);
+        chrome.storage.local.set(obj, function() {
+            //update
+            sendMsgToContent("storageUpdate",obj);
+        });
+    });
 }
 
 

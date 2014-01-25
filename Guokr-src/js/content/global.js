@@ -43,6 +43,9 @@ function store(key, value) {
         var obj = {};
         obj[key] = encodeURIComponent(value);
         sendMsg("setItem",obj,function(){});
+        
+        //重构用TEMP代码,完成后需要删掉
+        chrome.storage.local.set(obj, function() {});
     }
     else {//读取
         var rtnValue = localStorage.getItem(key);
@@ -50,10 +53,40 @@ function store(key, value) {
             return rtnValue ? decodeURIComponent(rtnValue) : "";
         }catch(e){return "";}
     }
-    
 }
 
-//简单json处理
+/////////////------------------------------------------
+var asyncstore = function(key, value) {
+	if (value) {// 异步存储
+        var obj = {};
+        obj[key] = encodeURIComponent(value);
+        log("set:" + value);     
+        return Wind.Async.Task.create(function(t){
+            chrome.storage.local.set(obj, function() {
+                t.complete("success", obj);
+            });
+        });
+
+	} else {// 异步读取
+        return Wind.Async.Task.create(function(t){
+            chrome.storage.local.get(key, function(data) {
+                var rtnValue = ""; 
+                try {rtnValue = (data[key] ? decodeURIComponent(data[key]) : "");} catch (e) {}
+                t.complete("success", rtnValue);
+            });
+        });
+		//var rtnValue = localStorage.getItem(key);
+	}
+}
+/////////////Invocation
+var waitForResult = eval(Wind.compile("async", function () {
+    var result = $await(asyncstore(obj));
+    log(result);
+}));
+//waitForResult().start();
+/////////////------------------------------------------
+
+// 简单json处理
 function obj2json(o){
     if(!o){return ""};
     return JSON.stringify(o);
