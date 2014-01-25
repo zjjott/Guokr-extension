@@ -60,9 +60,15 @@ function obj2json(o){
 }
 function json2obj(s){
     try{
-        return s ? eval("(" + s + ")") : new Object();
+        if (s) {
+            // 判断一下是否{开头是为了兼容纯文本字符串,不过暂时不是必须的,目前用到json2obj的只有gkr-user-groups和gkr-user-notes
+            return ($.trim(s).indexOf("{") == 0) ? JSON.parse(s) : JSON.parse('"' + s + '"');
+        } else {
+            return {};
+        }
+        // return s ? eval("(" + s + ")") : new Object();
     }catch(e){
-        return new Object();
+        return {};
     }
 }
 
