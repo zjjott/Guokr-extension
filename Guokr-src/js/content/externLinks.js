@@ -31,6 +31,7 @@ var Faces = {
         						"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7e/hei_thumb.gif",
         						"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/40/cool_thumb.gif",
         						"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/af/cry.gif",
+                                "http://img.t.sinajs.cn/t4/appstyle/expression/ext/normal/91/lazu_thumb.gif",
         						"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/f4/cj_thumb.gif",
         						"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/29/bz_thumb.gif",
         						"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/71/bs2_thumb.gif",
