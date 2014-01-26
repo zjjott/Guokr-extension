@@ -300,13 +300,16 @@ function domChanged() {
         
         var asyncfunc = eval(Wind.compile("async", function () {
             //如果localStorage中有旧版插件的数据,则将数据迁移到chrome.storage中
-            if(store("gkr-user-defaultfaces") || store("gkr-user-groups")){
-                var localStorageKeys = ["gkr-user-favfaces","gkr-user-defaultfaces","gkr-user-groups","gkr-user-groups-chktime","gkr-user-notes","ids","strs"];
+            if(store("gkr-user-defaultfaces")){
+                var localStorageKeys = ["gkr-user-favfaces","gkr-user-defaultfaces","gkr-user-notes","ids","strs"];
                 for(var i=0;i<localStorageKeys.length;i++){
                     var key = localStorageKeys[i];
                     $await(asyncstore(key,store(key)));
                     localStorage.removeItem(key);
                 }
+                //小组数据只需要重新获取就好了,不必迁移数据
+                localStorage.removeItem("gkr-user-groups");
+                localStorage.removeItem("gkr-user-groups-chktime");
             }
             
             //如果是第一次初始化载入默认表情
