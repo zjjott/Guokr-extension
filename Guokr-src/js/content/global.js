@@ -37,12 +37,8 @@ var colors = ["ffffff","ffccc9","ffce93","fffc9e","ffffc7","9aff99","96fffb","cd
 
 //--------Util--------
 function store(key, value) {
-    if (value) {//存储,发setItem消息
-        localStorage.setItem(key, encodeURIComponent(value));
-
-        var obj = {};
-        obj[key] = encodeURIComponent(value);
-        sendMsg("setItem",obj,function(){});
+    if (value) {//存储
+        console.warn("store func is deprecated!!!");
     }
     else {//读取
         var rtnValue = localStorage.getItem(key);
@@ -50,19 +46,56 @@ function store(key, value) {
             return rtnValue ? decodeURIComponent(rtnValue) : "";
         }catch(e){return "";}
     }
-    
 }
 
-//简单json处理
+var asyncstore = function(key, value) {
+	if (value) {// 异步存储
+        var obj = {};
+        obj[key] = encodeURIComponent(value);
+        log("set:" + value);     
+        return Wind.Async.Task.create(function(t){
+            chrome.storage.local.set(obj, function() {
+                t.complete("success", obj);
+            });
+        });
+
+	} else {// 异步读取
+        return Wind.Async.Task.create(function(t){
+            chrome.storage.local.get(key, function(data) {
+                var rtnValue = ""; 
+                try {rtnValue = (data[key] ? decodeURIComponent(data[key]) : "");} catch (e) {}
+                t.complete("success", rtnValue);
+            });
+        });
+		//var rtnValue = localStorage.getItem(key);
+	}
+}
+/////////////Sample of Invocation
+/**
+var waitForResult = eval(Wind.compile("async", function () {
+    var result = $await(asyncstore(obj));
+    log(result);
+}));
+waitForResult().start();
+*/
+/////////////
+
+// 简单json处理
 function obj2json(o){
     if(!o){return ""};
     return JSON.stringify(o);
 }
 function json2obj(s){
     try{
-        return s ? eval("(" + s + ")") : new Object();
+        if (s) {
+            // 判断一下是否{开头是为了兼容纯文本字符串,不过暂时不是必须的,目前用到json2obj的只有gkr-user-groups和gkr-user-notes
+            return ($.trim(s).indexOf("{") == 0) ? JSON.parse(s) : JSON.parse('"' + s + '"');
+        } else {
+            return {};
+        }
+        // return s ? eval("(" + s + ")") : new Object();
     }catch(e){
-        return new Object();
+        return {};
     }
 }
 
@@ -70,13 +103,6 @@ function json2obj(s){
 function log(info){
     if(!debugMode){return;}
     if(console){console.log(info); }
-}
-
-//消息发送
-function sendMsg(title,msg,callback){
-    var o = new Object();
-    o[title]=msg;
-    chrome.runtime.sendMessage(o,callback);
 }
 
 //--------Util-End-------

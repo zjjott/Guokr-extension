@@ -63,17 +63,21 @@ HoverMenu.showGroupsMenu = function(){
 	$("ul.gh-nav a[href='http://www.guokr.com/group/user/recent_replies/']").hover(function(){
 		clearTimeout(showGroupTimer);
 		var groupLink = $(this);
-		var rowLength = 5;
-		var groups = $("#gkr-groups-ul").children().length;
-		var grouprows = (groups/rowLength > (parseInt(groups/rowLength,10))) ? (parseInt(groups/rowLength,10) + 1) : (parseInt(groups/rowLength,10));
-		$("#gkr-groups-menu").show().css("width",(rowLength * 95) + 2)
-		.css("top",groupLink.offset().top + groupLink.height() + 23)
-		.css("left",groupLink.offset().left - 145);//首页位置修正
-		//.children("#gkr-groups-triangle").css("left",100-70+3).css("top",grouprows*22 + 22);
-		$("#gkr-groups-div").css("width",(rowLength * 95) + 5)
-		$("#gkr-groups-ul").css("height",grouprows*22 +5);
-		$("#gkr-groups-searchfav-ul").css("height",1*22);
+		showGroupTimer = setTimeout(function(){
+			var rowLength = 5;
+			var groups = $("#gkr-groups-ul").children().length;
+			var grouprows = (groups/rowLength > (parseInt(groups/rowLength,10))) ? (parseInt(groups/rowLength,10) + 1) : (parseInt(groups/rowLength,10));
+			$("#gkr-groups-menu").show().css("width",(rowLength * 95) + 2)
+			.css("top",groupLink.offset().top + groupLink.height() + 23)
+			.css("left",groupLink.offset().left - 145);//首页位置修正
+			//.children("#gkr-groups-triangle").css("left",100-70+3).css("top",grouprows*22 + 22);
+			$("#gkr-groups-div").css("width",(rowLength * 95) + 5)
+			$("#gkr-groups-ul").css("height",grouprows*22 +5);
+			$("#gkr-groups-searchfav-ul").css("height",1*22);
+		},400);
+
 	},function(){
+		clearTimeout(showGroupTimer);
 		showGroupTimer = setTimeout(function(){
 			$("#gkr-groups-menu").show().hide();
 		},400);
@@ -82,39 +86,50 @@ HoverMenu.showGroupsMenu = function(){
 
 //获取全部小组
 function getGroups(callback){
-    var groups = json2obj(store("gkr-user-groups"));
-    var size = 0;
-    $.each(groups,function(){size++;});
-    var time = new Date().getTime();
-    var lastcheck = store("gkr-user-groups-chktime") ? store("gkr-user-groups-chktime"): 0;
-
-    //存在且更新时间在1小时以内则使用既有groups
-    if(size > 0 && (time - lastcheck) < 3600000){callback(groups);return;} 
-
-    //否则获取并保存
-    if(selfHomepage){
+    
+    var asyncfunc = eval(Wind.compile("async", function () {
         
-        function fetchGroups(url){
-            $.get(url, function(data){
-                $(data).find("ul.join-list * div a[href^='http://www.guokr.com/group/']").each(function(){
-                    if($(this).attr("title")){
-                        groups[$(this).attr("href")] = $(this).attr("title");
+        var groupsdata = $await(asyncstore("gkr-user-groups"));
+        var groups = json2obj(groupsdata);
+        var size = 0;
+        $.each(groups,function(){size++;});
+        var time = new Date().getTime();
+        var lastcheckdata = $await(asyncstore("gkr-user-groups-chktime"));
+        var lastcheck = lastcheckdata ? lastcheckdata: 0;
+    
+        //存在且更新时间在1小时以内则使用既有groups
+        if(size > 0 && (time - lastcheck) < 3600000){callback(groups);return;} 
+    
+        //否则获取并保存
+        if(selfHomepage){
+            
+            function fetchGroups(url){
+                $.get(url, function(data){
+                    $(data).find("ul.join-list * div a[href^='http://www.guokr.com/group/']").each(function(){
+                        if($(this).attr("title")){
+                            groups[$(this).attr("href")] = $(this).attr("title");
+                        }
+                    });
+    
+                    //有多页(翻页最后一项是链接(下一页))
+                    if($(data).find("ul.gpages li:last a").text()){
+                        fetchGroups($(data).find("ul.gpages li:last").prev().children("a").attr("href"));
+                    }else{
+                        
+                        var asyncfunc1 = eval(Wind.compile("async", function () {
+                            $await(asyncstore("gkr-user-groups",obj2json(groups)));
+                            $await(asyncstore("gkr-user-groups-chktime",time));
+                            callback(groups);
+                        }));
+                        asyncfunc1().start();
                     }
                 });
-
-                //有多页(翻页最后一项是链接(下一页))
-                if($(data).find("ul.gpages li:last a").text()){
-                    fetchGroups($(data).find("ul.gpages li:last").prev().children("a").attr("href"));
-                }else{
-                    store("gkr-user-groups",obj2json(groups));
-                    store("gkr-user-groups-chktime",time);
-                    callback(groups);
-                }
-            });
+            }
+            groups = new Object();
+            fetchGroups(selfHomepage + "groups/");
         }
-        groups = new Object();
-        fetchGroups(selfHomepage + "groups/");
-    }
+    }));
+    asyncfunc().start();
 }
 
 //快速搜索
@@ -122,12 +137,13 @@ HoverMenu.searchGroups = function(){
 	$("#gkr-groups-searchbox").keyup(function(){
 		var searchText = $(this).val().toLowerCase();
 		var reg = new RegExp("^" + searchText);
+		var regForInitials = new RegExp(searchText);//按首字母搜索不要求从第一个字开始
 		$("#gkr-groups-ul").children().each(function(i,n){
 			var pyLetters = $(n).attr("pinyin");
 			var pyLettersLower = pyLetters.toLowerCase();
-			var shortLetters = pyLetters.replace(/[a-z]+/g,"").toLowerCase();
+			var pyInitials = pyLetters.replace(/[a-z]+/g,"").toLowerCase();
 			var fullName = $(n).children("a").attr("title").toLowerCase();
-			if(!reg.test(pyLettersLower) && !reg.test(shortLetters) && !reg.test(fullName)){
+			if(!reg.test(pyLettersLower) && !regForInitials.test(pyInitials) && !reg.test(fullName)){
 				$(n).hide();
 			}else{
 				$(n).show();
@@ -138,12 +154,16 @@ HoverMenu.searchGroups = function(){
 
 //获取全部小组
 HoverMenu.addGroupsName = function(){
+	var maxGroupName = 12;
 	getGroups(function(data){
 		$.each(data,function(i,n){
 				var groupName = n;
 				if(groupName.length > 7 && !/([a-zA-Z]|\s|\d|!)+/.test(n)){//长度超过7 又不包含英文的截断
 					groupName = groupName.substr(0,6) + "…";
 				}
+				if(groupName.length > maxGroupName ){//限制中英混合或纯英文的不超过12个字符,thank to spacewander.
+					groupName = groupName.substr(0,maxGroupName - 1) + "…";
+                }
 				$("<li style='float:left;width:95px;height:22px;' pinyin='" + Pinyin.get(n.replace(/\s|\d|!/g,"")) + "'>\
 				<a href='" + i + "' title='"+ n +"'>" + groupName + "</a></li>").appendTo("#gkr-groups-ul");
 		});
