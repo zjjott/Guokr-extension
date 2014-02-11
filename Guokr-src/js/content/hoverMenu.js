@@ -63,17 +63,21 @@ HoverMenu.showGroupsMenu = function(){
 	$("ul.gh-nav a[href='http://www.guokr.com/group/user/recent_replies/']").hover(function(){
 		clearTimeout(showGroupTimer);
 		var groupLink = $(this);
-		var rowLength = 5;
-		var groups = $("#gkr-groups-ul").children().length;
-		var grouprows = (groups/rowLength > (parseInt(groups/rowLength,10))) ? (parseInt(groups/rowLength,10) + 1) : (parseInt(groups/rowLength,10));
-		$("#gkr-groups-menu").show().css("width",(rowLength * 95) + 2)
-		.css("top",groupLink.offset().top + groupLink.height() + 23)
-		.css("left",groupLink.offset().left - 145);//首页位置修正
-		//.children("#gkr-groups-triangle").css("left",100-70+3).css("top",grouprows*22 + 22);
-		$("#gkr-groups-div").css("width",(rowLength * 95) + 5)
-		$("#gkr-groups-ul").css("height",grouprows*22 +5);
-		$("#gkr-groups-searchfav-ul").css("height",1*22);
+		showGroupTimer = setTimeout(function(){
+			var rowLength = 5;
+			var groups = $("#gkr-groups-ul").children().length;
+			var grouprows = (groups/rowLength > (parseInt(groups/rowLength,10))) ? (parseInt(groups/rowLength,10) + 1) : (parseInt(groups/rowLength,10));
+			$("#gkr-groups-menu").show().css("width",(rowLength * 95) + 2)
+			.css("top",groupLink.offset().top + groupLink.height() + 23)
+			.css("left",groupLink.offset().left - 145);//首页位置修正
+			//.children("#gkr-groups-triangle").css("left",100-70+3).css("top",grouprows*22 + 22);
+			$("#gkr-groups-div").css("width",(rowLength * 95) + 5)
+			$("#gkr-groups-ul").css("height",grouprows*22 +5);
+			$("#gkr-groups-searchfav-ul").css("height",1*22);
+		},400);
+
 	},function(){
+		clearTimeout(showGroupTimer);
 		showGroupTimer = setTimeout(function(){
 			$("#gkr-groups-menu").show().hide();
 		},400);
@@ -122,12 +126,13 @@ HoverMenu.searchGroups = function(){
 	$("#gkr-groups-searchbox").keyup(function(){
 		var searchText = $(this).val().toLowerCase();
 		var reg = new RegExp("^" + searchText);
+		var regForInitials = new RegExp(searchText);//按首字母搜索不要求从第一个字开始
 		$("#gkr-groups-ul").children().each(function(i,n){
 			var pyLetters = $(n).attr("pinyin");
 			var pyLettersLower = pyLetters.toLowerCase();
-			var shortLetters = pyLetters.replace(/[a-z]+/g,"").toLowerCase();
+			var pyInitials = pyLetters.replace(/[a-z]+/g,"").toLowerCase();
 			var fullName = $(n).children("a").attr("title").toLowerCase();
-			if(!reg.test(pyLettersLower) && !reg.test(shortLetters) && !reg.test(fullName)){
+			if(!reg.test(pyLettersLower) && !regForInitials.test(pyInitials) && !reg.test(fullName)){
 				$(n).hide();
 			}else{
 				$(n).show();
@@ -138,12 +143,16 @@ HoverMenu.searchGroups = function(){
 
 //获取全部小组
 HoverMenu.addGroupsName = function(){
+	var maxGroupName = 12;
 	getGroups(function(data){
 		$.each(data,function(i,n){
 				var groupName = n;
 				if(groupName.length > 7 && !/([a-zA-Z]|\s|\d|!)+/.test(n)){//长度超过7 又不包含英文的截断
 					groupName = groupName.substr(0,6) + "…";
 				}
+				if(groupName.length > maxGroupName ){//限制中英混合或纯英文的不超过12个字符,thank to spacewander.
+					groupName = groupName.substr(0,maxGroupName - 1) + "…";
+                }
 				$("<li style='float:left;width:95px;height:22px;' pinyin='" + Pinyin.get(n.replace(/\s|\d|!/g,"")) + "'>\
 				<a href='" + i + "' title='"+ n +"'>" + groupName + "</a></li>").appendTo("#gkr-groups-ul");
 		});
