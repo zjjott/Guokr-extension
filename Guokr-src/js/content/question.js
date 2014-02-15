@@ -9,14 +9,9 @@ Question.addFoldableHook = function(){
     $('a.answer-hover[data-operation="fold_toggle"]').click(function(){
         if ($(this).text() === "收起") {
             $(this).text("展开");
-            var height = $(this).parents('div.answer-r').children('.answer-txt').height();
-            if (height > 500) {
-                $(this).parents('div.answer-r').children('.answer-txt').slideUp('slow');
-            }
-            else if (height > 300)
-                $(this).parents('div.answer-r').children('.answer-txt').slideUp(); // normal
-            else
-                $(this).parents('div.answer-r').children('.answer-txt').slideUp('fast');
+            $(this).parents('div.answer-r').children('.answer-txt').slideUp(function(){
+                    return $(this).height();
+            }());
         }
         else{
             $(this).text("收起");
