@@ -86,39 +86,50 @@ HoverMenu.showGroupsMenu = function(){
 
 //获取全部小组
 function getGroups(callback){
-    var groups = json2obj(store("gkr-user-groups"));
-    var size = 0;
-    $.each(groups,function(){size++;});
-    var time = new Date().getTime();
-    var lastcheck = store("gkr-user-groups-chktime") ? store("gkr-user-groups-chktime"): 0;
-
-    //存在且更新时间在1小时以内则使用既有groups
-    if(size > 0 && (time - lastcheck) < 3600000){callback(groups);return;} 
-
-    //否则获取并保存
-    if(selfHomepage){
+    
+    var asyncfunc = eval(Wind.compile("async", function () {
         
-        function fetchGroups(url){
-            $.get(url, function(data){
-                $(data).find("ul.join-list * div a[href^='http://www.guokr.com/group/']").each(function(){
-                    if($(this).attr("title")){
-                        groups[$(this).attr("href")] = $(this).attr("title");
+        var groupsdata = $await(asyncstore("gkr-user-groups"));
+        var groups = json2obj(groupsdata);
+        var size = 0;
+        $.each(groups,function(){size++;});
+        var time = new Date().getTime();
+        var lastcheckdata = $await(asyncstore("gkr-user-groups-chktime"));
+        var lastcheck = lastcheckdata ? lastcheckdata: 0;
+    
+        //存在且更新时间在1小时以内则使用既有groups
+        if(size > 0 && (time - lastcheck) < 3600000){callback(groups);return;} 
+    
+        //否则获取并保存
+        if(selfHomepage){
+            
+            function fetchGroups(url){
+                $.get(url, function(data){
+                    $(data).find("ul.join-list * div a[href^='http://www.guokr.com/group/']").each(function(){
+                        if($(this).attr("title")){
+                            groups[$(this).attr("href")] = $(this).attr("title");
+                        }
+                    });
+    
+                    //有多页(翻页最后一项是链接(下一页))
+                    if($(data).find("ul.gpages li:last a").text()){
+                        fetchGroups($(data).find("ul.gpages li:last").prev().children("a").attr("href"));
+                    }else{
+                        
+                        var asyncfunc1 = eval(Wind.compile("async", function () {
+                            $await(asyncstore("gkr-user-groups",obj2json(groups)));
+                            $await(asyncstore("gkr-user-groups-chktime",time));
+                            callback(groups);
+                        }));
+                        asyncfunc1().start();
                     }
                 });
-
-                //有多页(翻页最后一项是链接(下一页))
-                if($(data).find("ul.gpages li:last a").text()){
-                    fetchGroups($(data).find("ul.gpages li:last").prev().children("a").attr("href"));
-                }else{
-                    store("gkr-user-groups",obj2json(groups));
-                    store("gkr-user-groups-chktime",time);
-                    callback(groups);
-                }
-            });
+            }
+            groups = new Object();
+            fetchGroups(selfHomepage + "groups/");
         }
-        groups = new Object();
-        fetchGroups(selfHomepage + "groups/");
-    }
+    }));
+    asyncfunc().start();
 }
 
 //快速搜索

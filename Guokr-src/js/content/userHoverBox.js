@@ -35,17 +35,28 @@ var UserHoverBox = {
     //备注改变事件
     changeNotes : function(){
         $("#gkr-hover-notes").change(function(){
-            var notes = json2obj(store("gkr-user-notes"));
-            notes[$("#gkr-hover-box").data("userId")] = $(this).val();
-            store("gkr-user-notes",obj2json(notes));
+            var note = $(this).val();
+            var asyncfunc = eval(Wind.compile("async", function () {
+                
+                var result = $await(asyncstore("gkr-user-notes"));
+                var notes = json2obj(result);
+                notes[$("#gkr-hover-box").data("userId")] = note;
+                //其实没有后续并不需要阻塞,如果不加$await等待就需要调用start(),因为asyncstore返回的是Task对象
+                $await(asyncstore("gkr-user-notes",obj2json(notes)));
+                
+            }));
+            asyncfunc().start();
         });
     },
     //屏蔽按钮事件
     clickBlock : function(){
         $("#gkr-hover-block").click(function(){
             if (confirm("确定要屏蔽该用户发言？")) {
-                addBlocked("ids", $("#gkr-hover-box").data("userId"));
-                initBlockList();
+                var asyncfunc = eval(Wind.compile("async", function () {
+                    $await(addBlocked("ids", $("#gkr-hover-box").data("userId")));
+                    initBlockList();
+                }));
+                asyncfunc().start();
             }
         });
     },
