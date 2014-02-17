@@ -43,6 +43,10 @@ text-decoration: none;
 	font-family: "Microsoft YaHei","WenQuanYi Micro Hei",SimHei,tohoma,sans-serif;
 	text-decoration: none;
 }
+.login :focus {
+    outline:none;
+}
+
 .baskets li .gellipsis {
 width: 300px;
 }
