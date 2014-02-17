@@ -421,6 +421,11 @@ function domChanged() {
         //站内信按钮事件
         UserHoverBox.clickMsg();
 
+        // 果壳问答
+        if (window.location.href.indexOf("http://www.guokr.com/question") != -1 ){
+            Question.addFoldableHook();
+        }
+
         //表情悬浮框
         Editor.addFacesBox();      
         //表情预览悬浮框
