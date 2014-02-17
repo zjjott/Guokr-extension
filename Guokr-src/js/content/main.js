@@ -15,18 +15,23 @@ function domChanged() {
     willRun = false;
     log("domChanged");
     //主过滤处理
-    var strsPlus = store("strs").split(",").concat(blockStrs);
-    var idsPlus = store("ids").split(",").concat(blockIDs);
-    $(".container").find("li a,dd a,li * a,dd * a,dl * a").filter(":visible").each(function(){
-        var a = $(this);
-        var text = a.text();
-        $.each(strsPlus,function(i,n){if(n && text.indexOf(n) != -1){a.closest("li,dd,dl").hide();return false;}});
-        var href = a.attr("href");
-        if(href && a.parent().attr("class") != "titles-b-r"){//最后回复者不作为过滤条件
-            var id = href.replace("http://www.guokr.com/i/","").replace(/\//g,"");
-            if(id && $.inArray(id,idsPlus) != -1){a.closest("li,dd,dl").hide();}
-        }
-    });
+    var blocking = eval(Wind.compile("async", function () {
+        var strsResult = $await(asyncstore("strs"));
+        var strsPlus = strsResult.split(",").concat(blockStrs);
+        var idsResult = $await(asyncstore("ids"));
+        var idsPlus = idsResult.split(",").concat(blockIDs);
+        $(".container").find("li a,dd a,li * a,dd * a,dl * a").filter(":visible").each(function(){
+            var a = $(this);
+            var text = a.text();
+            $.each(strsPlus,function(i,n){if(n && text.indexOf(n) != -1){a.closest("li,dd,dl").hide();return false;}});
+            var href = a.attr("href");
+            if(href && a.parent().attr("class") != "titles-b-r"){//最后回复者不作为过滤条件
+                var id = href.replace("http://www.guokr.com/i/","").replace(/\//g,"");
+                if(id && $.inArray(id,idsPlus) != -1){a.closest("li,dd,dl").hide();}
+            }
+        });
+    }));
+    blocking().start();
     
     //悬浮框
     $("a[href^='http://www.guokr.com/i/']").children("img[hoverBoxAdded!='true']").attr("hoverBoxAdded","true").hover(function(){
@@ -34,14 +39,18 @@ function domChanged() {
         var parent = $(this).parent();
         clearTimeout(outTimer);
         hoverTimer = setTimeout(function(){
-            var id = parent.attr("href").toString().replace("http://www.guokr.com/i/","").replace(/\//g,"");
-            $("#gkr-hover-box").hide().data("userId",id);
-            $("#gkr-hover-link").attr("href",parent.attr("href")).html(parent.text() + parent.attr("title"));
-            $("#gkr-hover-link:empty").html(parent.next(".lu_txt").text() + $(".post_user").text());
-            $("#gkr-hover-img").empty().append(img.clone().css("height","48px").css("width","48px"));
-            var note = json2obj(store("gkr-user-notes"))[id];
-            $("#gkr-hover-notes").val(note ? note : "");//FF,Chrome不处理undefined
-            $("#gkr-hover-box:hidden").css("top",img.offset().top - 120).css("left",img.offset().left).fadeIn("fast").children("#gkr-hover-triangle").css("left",img.attr("width")/2-6);
+            var asyncfunc = eval(Wind.compile("async", function () {
+                var id = parent.attr("href").toString().replace("http://www.guokr.com/i/","").replace(/\//g,"");
+                $("#gkr-hover-box").hide().data("userId",id);
+                $("#gkr-hover-link").attr("href",parent.attr("href")).html(parent.text() + parent.attr("title"));
+                $("#gkr-hover-link:empty").html(parent.next(".lu_txt").text() + $(".post_user").text());
+                $("#gkr-hover-img").empty().append(img.clone().css("height","48px").css("width","48px"));
+                var result = $await(asyncstore("gkr-user-notes"));
+                var note = json2obj(result)[id];
+                $("#gkr-hover-notes").val(note ? note : "");//FF,Chrome不处理undefined
+                $("#gkr-hover-box:hidden").css("top",img.offset().top - 120).css("left",img.offset().left).fadeIn("fast").children("#gkr-hover-triangle").css("left",img.attr("width")/2-6);
+            }));
+            asyncfunc().start();
         },800);
     },function(){
         clearTimeout(hoverTimer);
@@ -245,41 +254,21 @@ function domChanged() {
 }
 
 
-(function() {   
-    //消息处理
-    var handler = {
-        storageUpdate : function(data) {
-            log("storageUpdating");
-            log(data);
-            for(var key in data){
-                localStorage.setItem(key,data[key]);
-                if(key == "gkr-user-favfaces"){
-                    reloadFace();
-                }
+(function() {
+    
+    //收藏表情发生变化时reload
+    chrome.storage.onChanged.addListener(function(changes, namespace) {
+        for(var key in changes){
+            if(key == "gkr-user-favfaces"){
+                reloadFace();
             }
         }
-    }
-
-    //消息接收
-    chrome.runtime.onMessage.addListener(
-      function(request, sender, sendResponse) {
-        for(var title in request){
-          handler[title](request[title], sender, sendResponse);
-        }
-      }
-    );
+	});
         
-    //备份
+    // 备份
     $.each(Faces.defaultMoreFaces[Faces.defaultMoreFaces.length-1].faces,
         function(i,n){
             favFaces.push(n);
-    });
-
-    //需要从background载入的数据
-    sendMsg("getItemArray", ["gkr-user-favfaces"], function(data){
-        for(var key in data){
-            localStorage.setItem(key,data[key]);
-        }
     });
     
     //判断是否Opera JS模式
@@ -290,47 +279,70 @@ function domChanged() {
         contentLoaded();
     }
 
+    //重新加载我的收藏表情列表
     function reloadFace () {
-        log(store("gkr-user-favfaces"));
-        var facesdata = store("gkr-user-favfaces").split("\n");
-        oldFaces = new Array();
-        $.each(facesdata,function(i,n){
-            if(n && $.trim(n)){
-                oldFaces.push(n);
-             }
-        });
-        Faces.defaultMoreFaces[Faces.defaultMoreFaces.length-1].faces = oldFaces;
-
+        var asyncfunc = eval(Wind.compile("async", function () {
+            var result = $await(asyncstore("gkr-user-favfaces"));
+            var facesdata = result.split("\n");
+            oldFaces = new Array();
+            $.each(facesdata,function(i,n){
+                if(n && $.trim(n)){
+                    oldFaces.push(n);
+                 }
+            });
+            Faces.defaultMoreFaces[Faces.defaultMoreFaces.length-1].faces = oldFaces;
+        }));
+        asyncfunc().start();
     }
 
     //页面载入
     function contentLoaded() {
-        //如果是第一次初始化载入默认表情
-        if(!store("gkr-user-defaultfaces")){
-            store("gkr-user-defaultfaces",Faces.defaultFaces.join("\n"));
-        }
-
-        //初始化常用表情列表
-        if(store("gkr-user-defaultfaces") && $.trim(store("gkr-user-defaultfaces"))){
-            var facesdata = store("gkr-user-defaultfaces").split("\n");
-            $.each(facesdata,function(i,n){
-                if(n && $.trim(n)){
-                    faces.push(n);
+        
+        var asyncfunc = eval(Wind.compile("async", function () {
+            //如果localStorage中有旧版插件的数据,则将数据迁移到chrome.storage中
+            if(store("gkr-user-defaultfaces")){
+                var localStorageKeys = ["gkr-user-favfaces","gkr-user-defaultfaces","gkr-user-notes","ids","strs"];
+                for(var i=0;i<localStorageKeys.length;i++){
+                    var key = localStorageKeys[i];
+                    $await(asyncstore(key,store(key)));
+                    localStorage.removeItem(key);
                 }
-            });
-        }
-
-        //初始化收藏表情列表
-        if(store("gkr-user-favfaces") && $.trim(store("gkr-user-favfaces"))){
-            var facesdata = store("gkr-user-favfaces").split("\n");
-            var oldFaces = Faces.defaultMoreFaces[Faces.defaultMoreFaces.length-1].faces;
-            $.each(facesdata,function(i,n){
-                if(n && $.trim(n)){
-                    oldFaces.push(n);
-                }
-            });
-        }
-        	
+                //小组数据只需要重新获取就好了,不必迁移数据
+                localStorage.removeItem("gkr-user-groups");
+                localStorage.removeItem("gkr-user-groups-chktime");
+            }
+            
+            //如果是第一次初始化载入默认表情
+            var defaultfaces = $await(asyncstore("gkr-user-defaultfaces"));
+            if(!defaultfaces){
+                defaultfaces = Faces.defaultFaces.join("\n");
+                $await(asyncstore("gkr-user-defaultfaces",defaultfaces));
+            }
+    
+            //初始化常用表情列表
+            if(defaultfaces && $.trim(defaultfaces)){
+                var facesdata = defaultfaces.split("\n");
+                $.each(facesdata,function(i,n){
+                    if(n && $.trim(n)){
+                        faces.push(n);
+                    }
+                });
+            }
+            
+            //初始化收藏表情列表
+            var favfaces = $await(asyncstore("gkr-user-favfaces"));
+            if(favfaces && $.trim(favfaces)){
+                var facesdata = favfaces.split("\n");
+                var oldFaces = Faces.defaultMoreFaces[Faces.defaultMoreFaces.length-1].faces;
+                $.each(facesdata,function(i,n){
+                    if(n && $.trim(n)){
+                        oldFaces.push(n);
+                    }
+                });
+            }
+        }));
+        asyncfunc().start();
+        
         //如果是个人设置页面右侧追加配置项
         if (window.location.href == setHref) {
             //脚本设置区域
@@ -349,29 +361,55 @@ function domChanged() {
                             <fieldset><legend title="收藏表情设置">收藏表情设置</legend>\
                                 <ul id="gk-user-favfacesbox"/>\
                             </fieldset>\
-                            <a href="javascript:localStorage.setItem(\'gkr-user-groups\',\'\');">重置小组数据</a><br>\
-                            <a href="javascript:localStorage.setItem(\'gkr-user-favfaces\',\'\');localStorage.setItem(\'gkr-user-defaultfaces\',\'\');">重置自定义表情数据</a>\
+                            <a id="reset-user-groups" href="javascript:void(0);">重置小组数据</a><br>\
+                            <a id="reset-user-faces" href="javascript:void(0);">重置自定义表情数据</a>\
                         </fieldset>\
                     </div>\
                 </div>\
             ');
+            
+            //重置小组数据
+            $("#reset-user-groups").click(function(){
+                chrome.storage.local.remove("gkr-user-groups");
+            });
+            
+            //重置自定义表情数据
+            $("#reset-user-faces").click(function(){
+                if (confirm("确定要重置自定义表情数据？您的自定义表情可能会丢失！")) {
+                    chrome.storage.local.remove("gkr-user-favfaces");
+                    chrome.storage.local.remove("gkr-user-defaultfaces");
+                }
+            });
+            
             //关键词Add按钮
             $("<input type='button'>").val("Add").css("width", "35px").click(function(){
-                addBlocked("strs", $("#gk-pl-str").val());
-                initBlockList();
+                var asyncfunc = eval(Wind.compile("async", function () {
+                    $await(addBlocked("strs", $("#gk-pl-str").val()));
+                    initBlockList();
+                }));
+                asyncfunc().start();
             }).appendTo("#gk-pl-addstr");
             initBlockList();
             
             
            
             //自定义区保存事件
-            $("<textarea>").attr("id","gk-user-defaultfaces").val($.trim(store("gkr-user-defaultfaces"))).css("width", "655px").css("height","150px").blur(function(){
-                store("gkr-user-defaultfaces",$("#gk-user-defaultfaces").val() + " ");
-            }).appendTo("#gk-user-defaultfacesbox");
+            var asyncfunc1 = eval(Wind.compile("async", function () {
+                var defaultFaces = $await(asyncstore("gkr-user-defaultfaces"));
+                $("<textarea>").attr("id","gk-user-defaultfaces").val($.trim(defaultFaces)).css("width", "655px").css("height","150px").change(function(){
+                    asyncstore("gkr-user-defaultfaces",$("#gk-user-defaultfaces").val() + " ").start();
+                }).appendTo("#gk-user-defaultfacesbox");
+            }));
+            asyncfunc1().start();
             
-            $("<textarea>").attr("id","gk-user-favfaces").val($.trim(store("gkr-user-favfaces"))).css("width", "655px").css("height","300px").blur(function(){
-                store("gkr-user-favfaces",$("#gk-user-favfaces").val() + " ");
-            }).appendTo("#gk-user-favfacesbox");
+            var asyncfunc2 = eval(Wind.compile("async", function () {
+                var favFaces = $await(asyncstore("gkr-user-favfaces"));
+                $("<textarea>").attr("id","gk-user-favfaces").val($.trim(favFaces)).css("width", "655px").css("height","300px").change(function(){
+                    asyncstore("gkr-user-favfaces",$("#gk-user-favfaces").val() + " ").start();
+                }).appendTo("#gk-user-favfacesbox");
+            }));
+            asyncfunc2().start();
+            log("asyncfunc2");
         }
 
         //加载guoker悬挂框
@@ -382,6 +420,11 @@ function domChanged() {
         UserHoverBox.clickBlock();       
         //站内信按钮事件
         UserHoverBox.clickMsg();
+
+        // 果壳问答
+        if (window.location.href.indexOf("http://www.guokr.com/question") != -1 ){
+            Question.addFoldableHook();
+        }
 
         //表情悬浮框
         Editor.addFacesBox();      
