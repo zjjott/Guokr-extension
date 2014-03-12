@@ -135,7 +135,7 @@ function clickEvent(){
     $('.baskets').delegate('button','click', function(){
         var t = $(this);
         var basket_id = $("select").val();
-        log(t);
+        // log(t);
         link = localStorage.getItem("current_link");
         localStorage.removeItem('current_link');
         if (t.hasClass("remove")){
