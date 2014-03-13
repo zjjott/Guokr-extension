@@ -33,7 +33,13 @@ Editor.addColorPicker = function(){
 //获取可视化模式文本区域
 function getViewObject(){
     var iframe = $(".edui-editor iframe:visible");
-    if(iframe.length == 0){return null;}
+    if(iframe.length == 0){
+        var iframe = $("#mce_11-body iframe:visible");
+        if (iframe.length == 0) {
+            return null;
+        };
+
+    }
     return iframe.prop("contentDocument"); // for jQuery 1.6+
 }
 

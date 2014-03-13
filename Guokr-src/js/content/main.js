@@ -58,14 +58,30 @@ function domChanged() {
             $("#gkr-hover-box:visible").fadeOut("fast");
         },800);
     });
+    var toolBars = ["div.edui-toolbar[addFaceDone!='true']",
+    "div#mce_13-body[addFaceDone!='true']"]
 
     //功能按钮
-    if($("div.edui-toolbar[addFaceDone!='true']").length > 0){
-        var toolBar = $($("div.edui-toolbar[addFaceDone!='true']")[0]);
+    toolBars.forEach(function(bar) {
         
+    
+    if($(bar).length > 0){
+        var toolBar = $($(bar)[0]);
+        if (bar.charAt(4)=="m") {
+            var editorSelector = "#mce_11-body"
+            var cpButton = $("<div tabIndex='998'  id='mce_19' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_19-body'></div></div>");
+            cpButton.children().css("width",25);
+            cpButton.children().css("height",25);
+            cpButton.children().css("background-position","3px 3px");
+            cpButton.children().css("background-size","20px 20px");
+            cpButton.children().css("background-repeat","no-repeat");
+        }
+        else{
+            var editorSelector = ".edui-editor"
+            var cpButton = $("<div tabIndex='998' class='edui-box edui-button'><div class='edui-box edui-icon' style='background-position: 3px 3px;background-repeat: no-repeat;background-size: 20px 20px;'></div></div>");
+        }
         //颜色选择器
         var cp = "http://img1.guokr.com/gkimage/3u/wh/1y/3uwh1y.gif";
-        var cpButton = $("<div tabIndex='998' class='edui-box edui-button'><div class='edui-box edui-icon' style='background-position: 3px 3px;background-repeat: no-repeat;background-size: 20px 20px;'></div></div>");
         //tabIndex属性帮助div获取焦点,处理foucs blur事件                 
         cpButton.children().css("background-image","url('" + cp + "')");
         
@@ -86,7 +102,7 @@ function domChanged() {
             var top = cpLink.offset().top - 159;
             var triangleTop = 145;
             var trangleShape = {"border-color":"#2AA4CE transparent transparent transparent", "border-style":"solid dashed dashed dashed"}//down
-            if($(".edui-editor").offset().left < 10){//编辑器全屏
+            if($(editorSelector).offset().left < 10){//编辑器全屏
                 top = cpLink.offset().top + 40;
                 triangleTop = -16;
                 trangleShape = {"border-color":"transparent transparent #2AA4CE transparent", "border-style":"dashed dashed solid dashed"}//up
@@ -102,10 +118,19 @@ function domChanged() {
                 hideFaceTimer = setTimeout(function(){$("#gkr-color-box").hide();},500);
             });
         toolBar.append(cpButton);
-        
+        if (bar.charAt(4)=="m") {
+            var moreFaceButton = $("<div tabIndex='999'  id='mce_20' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_19-body'></div></div>");
+            moreFaceButton.children().css("width",25);
+            moreFaceButton.children().css("height",25);
+            moreFaceButton.children().css("background-position","3px 3px");
+            moreFaceButton.children().css("background-size","20px 20px");
+            moreFaceButton.children().css("background-repeat","no-repeat");
+        }
+        else{
+            var moreFaceButton = $("<div tabIndex='999' class='edui-box edui-button'><div class='edui-box edui-icon' style='background-position: 2px 2px;background-repeat: no-repeat;'></div></div>");
+        }
         //加入更多表情
         var moreFace = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/eb/smile.gif";
-        var moreFaceButton = $("<div tabIndex='999' class='edui-box edui-button'><div class='edui-box edui-icon' style='background-position: 2px 2px;background-repeat: no-repeat;'></div></div>");
         //tabIndex属性帮助div获取焦点,处理foucs blur事件
         moreFaceButton.children().css("background-image","url('" + moreFace + "')");
         moreFaceButton.click(function(){
@@ -133,7 +158,7 @@ function domChanged() {
             var top = morefaceLink.offset().top - facerows*22 - 36 - 22;
             var triangleTop = facerows*22 + 44;
             var trangleShape = {"border-color":"#2AA4CE transparent transparent transparent", "border-style":"solid dashed dashed dashed"}//down
-            if($(".edui-editor").offset().left < 10){//编辑器全屏
+            if($(editorSelector).offset().left < 10){//编辑器全屏
                 top = morefaceLink.offset().top + 40;
                 triangleTop = -16;
                 trangleShape = {"border-color":"transparent transparent #2AA4CE transparent", "border-style":"dashed dashed solid dashed"}//up
@@ -174,7 +199,7 @@ function domChanged() {
                 var top = morefaceLink.offset().top - facerows*22 - 36;
                 var triangleTop = facerows*22 + 22;
                 var trangleShape = {"border-color":"#2AA4CE transparent transparent transparent", "border-style":"solid dashed dashed dashed"}//down
-                if($(".edui-editor").offset().left < 10){//编辑器全屏
+                if($(editorSelector).offset().left < 10){//编辑器全屏
                     top = morefaceLink.offset().top + 40;
                     triangleTop = -16;
                     trangleShape = {"border-color":"transparent transparent #2AA4CE transparent", "border-style":"dashed dashed solid dashed"}//up
@@ -224,7 +249,7 @@ function domChanged() {
                 var top = moreFaceButton.offset().top - facerows*22 - 36 - 22;
                 var triangleTop = facerows*22 + 44;
                 var trangleShape = {"border-color":"#2AA4CE transparent transparent transparent", "border-style":"solid dashed dashed dashed"}//down
-                if($(".edui-editor").offset().left < 10){//编辑器全屏
+                if($(editorSelector).offset().left < 10){//编辑器全屏
                     top = moreFaceButton.offset().top + 40;
                     triangleTop = -16;
                     trangleShape = {"border-color":"transparent transparent #2AA4CE transparent", "border-style":"dashed dashed solid dashed"}//up
@@ -251,6 +276,8 @@ function domChanged() {
         toolBar.attr("addFaceDone","true"); 
 
     }
+
+    })
 }
 
 
