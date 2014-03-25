@@ -117,7 +117,8 @@ function domChanged() {
             }).blur(function(){
                 hideFaceTimer = setTimeout(function(){$("#gkr-color-box").hide();},500);
             });
-        toolBar.append(cpButton);
+        //果壳颜色功能已经被干掉,暂时隐藏颜色选择器
+        //toolBar.append(cpButton);
         if (bar.charAt(4)=="m") {
             var moreFaceButton = $("<div tabIndex='999'  id='mce_20' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_19-body'></div></div>");
             moreFaceButton.children().css("width",25);
