@@ -59,7 +59,8 @@ function domChanged() {
         },800);
     });
     var toolBars = ["div.edui-toolbar[addFaceDone!='true']",
-    "div#mce_13-body[addFaceDone!='true']"]
+        //发新帖的页面和别的地方有点不一样
+        window.location.href.match("/post/edit/") ? "div#mce_14-body[addFaceDone!='true']" : "div#mce_13-body[addFaceDone!='true']"]
 
     //功能按钮
     toolBars.forEach(function(bar) {
@@ -67,9 +68,18 @@ function domChanged() {
     
     if($(bar).length > 0){
         var toolBar = $($(bar)[0]);
-        if (bar.charAt(4)=="m") {
+        if (bar.charAt(9)=="3") {
             var editorSelector = "#mce_11-body"
             var cpButton = $("<div tabIndex='998'  id='mce_19' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_19-body'></div></div>");
+            cpButton.children().css("width",25);
+            cpButton.children().css("height",25);
+            cpButton.children().css("background-position","3px 3px");
+            cpButton.children().css("background-size","20px 20px");
+            cpButton.children().css("background-repeat","no-repeat");
+        }
+        else if (bar.charAt(9)=="4") {
+            var editorSelector = "#mce_12-body"
+            var cpButton = $("<div tabIndex='998'  id='mce_20' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_20-body'></div></div>");
             cpButton.children().css("width",25);
             cpButton.children().css("height",25);
             cpButton.children().css("background-position","3px 3px");
@@ -119,8 +129,16 @@ function domChanged() {
             });
         //果壳颜色功能已经被干掉,暂时隐藏颜色选择器
         //toolBar.append(cpButton);
-        if (bar.charAt(4)=="m") {
-            var moreFaceButton = $("<div tabIndex='999'  id='mce_20' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_19-body'></div></div>");
+        if (bar.charAt(9)=="3") {
+            var moreFaceButton = $("<div tabIndex='999'  id='mce_20' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_20-body'></div></div>");
+            moreFaceButton.children().css("width",25);
+            moreFaceButton.children().css("height",25);
+            moreFaceButton.children().css("background-position","3px 3px");
+            moreFaceButton.children().css("background-size","20px 20px");
+            moreFaceButton.children().css("background-repeat","no-repeat");
+        }
+        eles if (bar.charAt(9)=="4") {
+            var moreFaceButton = $("<div tabIndex='999'  id='mce_21' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_21-body'></div></div>");
             moreFaceButton.children().css("width",25);
             moreFaceButton.children().css("height",25);
             moreFaceButton.children().css("background-position","3px 3px");
