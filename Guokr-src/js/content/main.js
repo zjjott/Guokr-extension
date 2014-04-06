@@ -58,8 +58,9 @@ function domChanged() {
             $("#gkr-hover-box:visible").fadeOut("fast");
         },800);
     });
+
+    //发新帖的页面和别的地方有点不一样
     var toolBars = ["div.edui-toolbar[addFaceDone!='true']",
-        //发新帖的页面和别的地方有点不一样
         window.location.href.match("/post/edit/") ? "div#mce_14-body[addFaceDone!='true']" : "div#mce_13-body[addFaceDone!='true']"]
 
     //功能按钮
