@@ -130,7 +130,6 @@ function domChanged() {
         //果壳颜色功能已经被干掉,暂时隐藏颜色选择器
         //toolBar.append(cpButton);*/
         
-        
         //加入更多表情
         if (isMce) {
             var moreFaceButton = $("<div tabIndex='999'  id='mce_99' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_99-body'></div></div>");

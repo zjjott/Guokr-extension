@@ -94,4 +94,4 @@ function showPreview(url,currentTarget){
 function hidePreview(){
     clearTimeout(showPreviewTimer);
     $("#gkr-preview-box").hide();
-}    
+}
