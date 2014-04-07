@@ -66,8 +66,20 @@ function domChanged() {
         var toolBar = $($(toolBarSelector)[0]);
         var isMce = toolBar.hasClass("mce-flow-layout");
         
+        // 设置MOOC学院的显示偏移        
+        var moocOffsetTop = 0;
+        var moocOffsetLeft = 0;
+        if(pageurl.indexOf("mooc.guokr.com") !=-1 ){
+            moocOffsetTop = -83;
+            moocOffsetLeft = -333;
+        }
+        
+        
+        var editorSelector = isMce ? ".mce-edit-area" : ".edui-editor";
+        
+        /**
+        //颜色选择器
         if (isMce) {
-            var editorSelector = ".mce-edit-area";
             var cpButton = $("<div tabIndex='998'  id='mce_98' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_98-body'></div></div>");
             cpButton.children().css("width",25);
             cpButton.children().css("height",25);
@@ -76,10 +88,9 @@ function domChanged() {
             cpButton.children().css("background-repeat","no-repeat");
         }
         else{
-            var editorSelector = ".edui-editor"
             var cpButton = $("<div tabIndex='998' class='edui-box edui-button'><div class='edui-box edui-icon' style='background-position: 3px 3px;background-repeat: no-repeat;background-size: 20px 20px;'></div></div>");
         }
-        //颜色选择器
+
         var cp = "http://img1.guokr.com/gkimage/3u/wh/1y/3uwh1y.gif";
         //tabIndex属性帮助div获取焦点,处理foucs blur事件                 
         cpButton.children().css("background-image","url('" + cp + "')");
@@ -113,11 +124,14 @@ function domChanged() {
             .css("left",180-60+3)
             .css("top",triangleTop)
             .css(trangleShape);
-            }).blur(function(){
-                hideFaceTimer = setTimeout(function(){$("#gkr-color-box").hide();},500);
-            });
+        }).blur(function(){
+            hideFaceTimer = setTimeout(function(){$("#gkr-color-box").hide();},500);
+        });
         //果壳颜色功能已经被干掉,暂时隐藏颜色选择器
-        //toolBar.append(cpButton);
+        //toolBar.append(cpButton);*/
+        
+        
+        //加入更多表情
         if (isMce) {
             var moreFaceButton = $("<div tabIndex='999'  id='mce_99' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_99-body'></div></div>");
             moreFaceButton.children().css("width",25);
@@ -129,7 +143,7 @@ function domChanged() {
         else{
             var moreFaceButton = $("<div tabIndex='999' class='edui-box edui-button'><div class='edui-box edui-icon' style='background-position: 2px 2px;background-repeat: no-repeat;'></div></div>");
         }
-        //加入更多表情
+        
         var moreFace = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/eb/smile.gif";
         //tabIndex属性帮助div获取焦点,处理foucs blur事件
         moreFaceButton.children().css("background-image","url('" + moreFace + "')");
@@ -155,18 +169,18 @@ function domChanged() {
             var facerows = (moreFaces.length/rowLength > (parseInt(moreFaces.length/rowLength,10))) ? (parseInt(moreFaces.length/rowLength,10) + 1) : (parseInt(moreFaces.length/rowLength,10));
 
             //默认情况
-            var top = morefaceLink.offset().top - facerows*22 - 36 - 22;
+            var top = morefaceLink.offset().top + moocOffsetTop - facerows*22 - 36 - 22;
             var triangleTop = facerows*22 + 44;
             var trangleShape = {"border-color":"#2AA4CE transparent transparent transparent", "border-style":"solid dashed dashed dashed"}//down
             if($(editorSelector).offset().left < 10){//编辑器全屏
-                top = morefaceLink.offset().top + 40;
+                top = morefaceLink.offset().top + moocOffsetTop + 40;
                 triangleTop = -16;
                 trangleShape = {"border-color":"transparent transparent #2AA4CE transparent", "border-style":"dashed dashed solid dashed"}//up
             }
             $("#gkr-faces-div").css("width",(rowLength * 22) + 2);
             $("#gkr-faces-box").show().css("width",(rowLength * 22) + 2)
             .css("top",top)
-            .css("left",morefaceLink.offset().left - 210 + 70)
+            .css("left",morefaceLink.offset().left + moocOffsetLeft - 210 + 70)
             .children("#gkr-faces-triangle").css("left",210-70+5)
             .css("top",triangleTop)
             .css(trangleShape);
@@ -177,7 +191,6 @@ function domChanged() {
             hideFaceTimer = setTimeout(function(){$("#gkr-faces-box").hide();},500);
         }).hover(function(){//常用表情
             var morefaceLink = $(this);
-            log(morefaceLink)
             //200ms延迟显示
             showFaceTimer = setTimeout(function(){
                 //如果更多表情已经显示则不再显示常用表情
@@ -197,19 +210,18 @@ function domChanged() {
                 
                 
                 //默认情况
-                var top = morefaceLink.offset().top - facerows*22 - 36;
+                var top = morefaceLink.offset().top + moocOffsetTop - facerows*22 - 36;
                 var triangleTop = facerows*22 + 22;
                 var trangleShape = {"border-color":"#2AA4CE transparent transparent transparent", "border-style":"solid dashed dashed dashed"}//down
                 if($(editorSelector).offset().left < 10){//编辑器全屏
-                    top = morefaceLink.offset().top + 40;
+                    top = morefaceLink.offset().top + moocOffsetTop + 40;
                     triangleTop = -16;
                     trangleShape = {"border-color":"transparent transparent #2AA4CE transparent", "border-style":"dashed dashed solid dashed"}//up
                 }
-                log(morefaceLink.offset().top + " top " + top + " facerows " + facerows);
                 $("#gkr-faces-div").css("width",(rowLength * 22) + 2);
                 $("#gkr-faces-box").show().css("width",(rowLength * 22) + 2)
                 .css("top",top)
-                .css("left",morefaceLink.offset().left - 100 + 70)
+                .css("left",morefaceLink.offset().left + moocOffsetLeft - 100 + 70)
                 .children("#gkr-faces-triangle").css("left",100-70+5)
                 .css("top",triangleTop)
                 .css(trangleShape);
@@ -245,22 +257,24 @@ function domChanged() {
                 var rowLength = 14;
                 var facerows = (moreFaces.length/rowLength > (parseInt(moreFaces.length/rowLength,10))) ? (parseInt(moreFaces.length/rowLength,10) + 1) : (parseInt(moreFaces.length/rowLength,10));
                 $("#gkr-faces-div").css("width",(rowLength * 22) + 2);
+
+                
                 
                 //默认情况
-                var top = moreFaceButton.offset().top - facerows*22 - 36 - 22;
+                var top = moreFaceButton.offset().top + moocOffsetTop - facerows*22 - 36 - 22;
                 var triangleTop = facerows*22 + 44;
                 var trangleShape = {"border-color":"#2AA4CE transparent transparent transparent", "border-style":"solid dashed dashed dashed"}//down
                 if($(editorSelector).offset().left < 10){//编辑器全屏
-                    top = moreFaceButton.offset().top + 40;
+                    top = moreFaceButton.offset().top + moocOffsetTop + 40;
                     triangleTop = -16;
                     trangleShape = {"border-color":"transparent transparent #2AA4CE transparent", "border-style":"dashed dashed solid dashed"}//up
                 }
                 
                 $("#gkr-faces-box").show().css("width",(rowLength * 22) + 2)
                 .css("top",top)
-                .css("left",moreFaceButton.offset().left - 210 + 70)
+                .css("left",moreFaceButton.offset().left + moocOffsetLeft - 210 + 70)
                 .children("#gkr-faces-triangle")
-                .css("left",210-70+3)
+                .css("left",210-70+5)
                 .css("top",triangleTop)
                 .css(trangleShape);
                 log(facerows*22 +20);
