@@ -34,7 +34,7 @@ Editor.addColorPicker = function(){
 function getViewObject(){
     var iframe = $(".edui-editor iframe:visible");
     if(iframe.length == 0){
-        var iframe = $("#mce_11-body iframe:visible");
+        var iframe = $(".mce-edit-area iframe:visible");
         if (iframe.length == 0) {
             return null;
         };
@@ -94,4 +94,4 @@ function showPreview(url,currentTarget){
 function hidePreview(){
     clearTimeout(showPreviewTimer);
     $("#gkr-preview-box").hide();
-}    
+}

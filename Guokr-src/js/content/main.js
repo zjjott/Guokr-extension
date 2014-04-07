@@ -58,18 +58,29 @@ function domChanged() {
             $("#gkr-hover-box:visible").fadeOut("fast");
         },800);
     });
-    var toolBars = ["div.edui-toolbar[addFaceDone!='true']",
-    "div#mce_13-body[addFaceDone!='true']"]
+    var toolBarSelector = "div.edui-toolbar[addFaceDone!='true'],div.mce-container-body.mce-flow-layout[addFaceDone!='true']";
 
     //功能按钮
-    toolBars.forEach(function(bar) {
+    //暂时有bug,问答页面有两个编辑器时会有冲突
+    if($(toolBarSelector).length > 0){
+        var toolBar = $($(toolBarSelector)[0]);
+        var isMce = toolBar.hasClass("mce-flow-layout");
         
-    
-    if($(bar).length > 0){
-        var toolBar = $($(bar)[0]);
-        if (bar.charAt(4)=="m") {
-            var editorSelector = "#mce_11-body"
-            var cpButton = $("<div tabIndex='998'  id='mce_19' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_19-body'></div></div>");
+        // 设置MOOC学院的显示偏移        
+        var moocOffsetTop = 0;
+        var moocOffsetLeft = 0;
+        if(pageurl.indexOf("mooc.guokr.com") !=-1 ){
+            moocOffsetTop = -83;
+            moocOffsetLeft = -333;
+        }
+        
+        
+        var editorSelector = isMce ? ".mce-edit-area" : ".edui-editor";
+        
+        /**
+        //颜色选择器
+        if (isMce) {
+            var cpButton = $("<div tabIndex='998'  id='mce_98' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_98-body'></div></div>");
             cpButton.children().css("width",25);
             cpButton.children().css("height",25);
             cpButton.children().css("background-position","3px 3px");
@@ -77,10 +88,9 @@ function domChanged() {
             cpButton.children().css("background-repeat","no-repeat");
         }
         else{
-            var editorSelector = ".edui-editor"
             var cpButton = $("<div tabIndex='998' class='edui-box edui-button'><div class='edui-box edui-icon' style='background-position: 3px 3px;background-repeat: no-repeat;background-size: 20px 20px;'></div></div>");
         }
-        //颜色选择器
+
         var cp = "http://img1.guokr.com/gkimage/3u/wh/1y/3uwh1y.gif";
         //tabIndex属性帮助div获取焦点,处理foucs blur事件                 
         cpButton.children().css("background-image","url('" + cp + "')");
@@ -114,13 +124,15 @@ function domChanged() {
             .css("left",180-60+3)
             .css("top",triangleTop)
             .css(trangleShape);
-            }).blur(function(){
-                hideFaceTimer = setTimeout(function(){$("#gkr-color-box").hide();},500);
-            });
+        }).blur(function(){
+            hideFaceTimer = setTimeout(function(){$("#gkr-color-box").hide();},500);
+        });
         //果壳颜色功能已经被干掉,暂时隐藏颜色选择器
-        //toolBar.append(cpButton);
-        if (bar.charAt(4)=="m") {
-            var moreFaceButton = $("<div tabIndex='999'  id='mce_20' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_19-body'></div></div>");
+        //toolBar.append(cpButton);*/
+        
+        //加入更多表情
+        if (isMce) {
+            var moreFaceButton = $("<div tabIndex='999'  id='mce_99' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_99-body'></div></div>");
             moreFaceButton.children().css("width",25);
             moreFaceButton.children().css("height",25);
             moreFaceButton.children().css("background-position","3px 3px");
@@ -130,7 +142,7 @@ function domChanged() {
         else{
             var moreFaceButton = $("<div tabIndex='999' class='edui-box edui-button'><div class='edui-box edui-icon' style='background-position: 2px 2px;background-repeat: no-repeat;'></div></div>");
         }
-        //加入更多表情
+        
         var moreFace = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/eb/smile.gif";
         //tabIndex属性帮助div获取焦点,处理foucs blur事件
         moreFaceButton.children().css("background-image","url('" + moreFace + "')");
@@ -142,7 +154,7 @@ function domChanged() {
             if($("#gkr-faces-ul:empty").length > 0){
                 moreFaces = Faces.defaultMoreFaces[0].faces;
                 $.each(moreFaces,function(i,n){
-                    $("#gkr-faces-ul").append($("<li style='line-height:22px;height:22px;width:22px;padding:0px;float: left;'>").append(
+                    $("#gkr-faces-ul").append($("<li style='margin:0;line-height:22px;height:22px;width:22px;padding:0px;float: left;'>").append(
                         $("<a href='javascript:void(0);' style='display:block;float: left;height: 22px; width: 22px;background-size:22px 22px;background-position:1px 0px;' />")
                         .css("background-image","url('" + $.trim(n) + "')")
                         .click(function(){addFace($.trim(n));})
@@ -156,18 +168,18 @@ function domChanged() {
             var facerows = (moreFaces.length/rowLength > (parseInt(moreFaces.length/rowLength,10))) ? (parseInt(moreFaces.length/rowLength,10) + 1) : (parseInt(moreFaces.length/rowLength,10));
 
             //默认情况
-            var top = morefaceLink.offset().top - facerows*22 - 36 - 22;
+            var top = morefaceLink.offset().top + moocOffsetTop - facerows*22 - 36 - 22;
             var triangleTop = facerows*22 + 44;
             var trangleShape = {"border-color":"#2AA4CE transparent transparent transparent", "border-style":"solid dashed dashed dashed"}//down
             if($(editorSelector).offset().left < 10){//编辑器全屏
-                top = morefaceLink.offset().top + 40;
+                top = morefaceLink.offset().top + moocOffsetTop + 40;
                 triangleTop = -16;
                 trangleShape = {"border-color":"transparent transparent #2AA4CE transparent", "border-style":"dashed dashed solid dashed"}//up
             }
             $("#gkr-faces-div").css("width",(rowLength * 22) + 2);
             $("#gkr-faces-box").show().css("width",(rowLength * 22) + 2)
             .css("top",top)
-            .css("left",morefaceLink.offset().left - 210 + 70)
+            .css("left",morefaceLink.offset().left + moocOffsetLeft - 210 + 70)
             .children("#gkr-faces-triangle").css("left",210-70+5)
             .css("top",triangleTop)
             .css(trangleShape);
@@ -187,7 +199,7 @@ function domChanged() {
                 $("#gkr-faces-ul").empty();
                 if($("#gkr-faces-ul:empty").length > 0){
                     $.each(faces,function(i,n){
-                            $("#gkr-faces-ul").append($("<li style='line-height:22px;height:22px;width:22px;padding:0px;float: left;'>").append($("<a href='javascript:void(0);' style='display:block;float: left;height: 22px; width: 22px;background-size:22px 22px;background-position:1px 0px;' />").css("background-image","url('" + $.trim(n) + "')").click(function(){addFace($.trim(n));})));
+                            $("#gkr-faces-ul").append($("<li style='margin:0;line-height:22px;height:22px;width:22px;padding:0px;float: left;'>").append($("<a href='javascript:void(0);' style='display:block;float: left;height: 22px; width: 22px;background-size:22px 22px;background-position:1px 0px;' />").css("background-image","url('" + $.trim(n) + "')").click(function(){addFace($.trim(n));})));
                     });
                 }
                 try{morefaceLink.focus();}catch(e){}//Chrome需要调用focus()获取焦点,FF调用反而会抛出异常
@@ -197,19 +209,18 @@ function domChanged() {
                 
                 
                 //默认情况
-                var top = morefaceLink.offset().top - facerows*22 - 36;
+                var top = morefaceLink.offset().top + moocOffsetTop - facerows*22 - 36;
                 var triangleTop = facerows*22 + 22;
                 var trangleShape = {"border-color":"#2AA4CE transparent transparent transparent", "border-style":"solid dashed dashed dashed"}//down
                 if($(editorSelector).offset().left < 10){//编辑器全屏
-                    top = morefaceLink.offset().top + 40;
+                    top = morefaceLink.offset().top + moocOffsetTop + 40;
                     triangleTop = -16;
                     trangleShape = {"border-color":"transparent transparent #2AA4CE transparent", "border-style":"dashed dashed solid dashed"}//up
                 }
-                
                 $("#gkr-faces-div").css("width",(rowLength * 22) + 2);
                 $("#gkr-faces-box").show().css("width",(rowLength * 22) + 2)
                 .css("top",top)
-                .css("left",morefaceLink.offset().left - 100 + 70)
+                .css("left",morefaceLink.offset().left + moocOffsetLeft - 100 + 70)
                 .children("#gkr-faces-triangle").css("left",100-70+5)
                 .css("top",triangleTop)
                 .css(trangleShape);
@@ -224,7 +235,7 @@ function domChanged() {
         
         //表情分组与切换
         $.each(Faces.defaultMoreFaces,function(i,n){
-            $("#gkr-faces-groups-ul").append($("<li style='line-height:22px;height:22px;padding:0px 2px 0px 2px;float: left;'></li>").append($("<a index='" + i + "' href='javascript:void(0);'>"+ n.name +"</a>").click(function(){
+            $("#gkr-faces-groups-ul").append($("<li style='margin:0;line-height:22px;height:22px;padding:0px 2px 0px 2px;float: left;'></li>").append($("<a style='font-size: 12px;color: #0078b6' index='" + i + "' href='javascript:void(0);'>"+ n.name +"</a>").click(function(){
                 var index = parseInt($(this).attr("index"),10);
                 
                 
@@ -232,7 +243,7 @@ function domChanged() {
                 $("#gkr-faces-ul").empty();
                 if($("#gkr-faces-ul:empty").length > 0){
                     $.each(moreFaces,function(i,n){
-                        $("#gkr-faces-ul").append($("<li style='line-height:22px;height:22px;width:22px;padding:0px;float: left;'>").append(
+                        $("#gkr-faces-ul").append($("<li style='margin:0;line-height:22px;height:22px;width:22px;padding:0px;float: left;'>").append(
                             $("<a href='javascript:void(0);' style='display:block;float: left;height: 22px; width: 22px;background-size:22px 22px;background-position:1px 0px;' />")
                             .css("background-image","url('" + $.trim(n) + "')")
                             .click(function(){addFace($.trim(n));})
@@ -245,22 +256,24 @@ function domChanged() {
                 var rowLength = 14;
                 var facerows = (moreFaces.length/rowLength > (parseInt(moreFaces.length/rowLength,10))) ? (parseInt(moreFaces.length/rowLength,10) + 1) : (parseInt(moreFaces.length/rowLength,10));
                 $("#gkr-faces-div").css("width",(rowLength * 22) + 2);
+
+                
                 
                 //默认情况
-                var top = moreFaceButton.offset().top - facerows*22 - 36 - 22;
+                var top = moreFaceButton.offset().top + moocOffsetTop - facerows*22 - 36 - 22;
                 var triangleTop = facerows*22 + 44;
                 var trangleShape = {"border-color":"#2AA4CE transparent transparent transparent", "border-style":"solid dashed dashed dashed"}//down
                 if($(editorSelector).offset().left < 10){//编辑器全屏
-                    top = moreFaceButton.offset().top + 40;
+                    top = moreFaceButton.offset().top + moocOffsetTop + 40;
                     triangleTop = -16;
                     trangleShape = {"border-color":"transparent transparent #2AA4CE transparent", "border-style":"dashed dashed solid dashed"}//up
                 }
                 
                 $("#gkr-faces-box").show().css("width",(rowLength * 22) + 2)
                 .css("top",top)
-                .css("left",moreFaceButton.offset().left - 210 + 70)
+                .css("left",moreFaceButton.offset().left + moocOffsetLeft - 210 + 70)
                 .children("#gkr-faces-triangle")
-                .css("left",210-70+3)
+                .css("left",210-70+5)
                 .css("top",triangleTop)
                 .css(trangleShape);
                 log(facerows*22 +20);
@@ -269,16 +282,15 @@ function domChanged() {
         });
         
         //短网址用于统计
-        toolBar.append($("<div id='countLink' class='edui-box edui-button' style='height:25px;width:0px;border-style:none;border-width:0px;background-size:21px 0px;background-position:2px 2px;color:#CECFCE;' >\
+        toolBar.append($("<div id='countLink' class='edui-box edui-button' style='width:0px;border-style:none;border-width:0px;background-size:21px 0px;background-position:2px 2px;color:#CECFCE;' >\
                               <div class='edui-box edui-icon' >\
                               </div>\
                           </div>").css("background-image","url('http://goo.gl/IkF5C')"));             
-        //$(".gui-ubb-links").attr("addFaceDone","true");
-        toolBar.attr("addFaceDone","true"); 
+        //目前只支持同一个页面上的第一个编辑器
+        $(toolBarSelector).attr("addFaceDone","true"); 
 
     }
 
-    })
 }
 
 
