@@ -35,6 +35,14 @@ var colors = ["ffffff","ffccc9","ffce93","fffc9e","ffffc7","9aff99","96fffb","cd
                 "329a9d","3531ff","6200c9","343434","680100","963400","986536","646809","036400","34696d","00009b",
                 "303498","000000","330001","643403","663234","343300","013300","003532","010066","340096"];
 
+//MOOC学院的显示偏移
+var moocOffsetTop = 0;
+var moocOffsetLeft = 0;
+if(pageurl.indexOf("mooc.guokr.com") !=-1 ){
+    moocOffsetTop = -85;
+    moocOffsetLeft = -341;
+}
+
 //--------Util--------
 function store(key, value) {
     if (value) {//存储

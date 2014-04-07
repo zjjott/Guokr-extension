@@ -88,7 +88,7 @@ function showPreview(url,currentTarget){
         if(currentTargetLeft - previewDivLeft <  (boxWidth/2)){
             previewDivLeft = previewDivLeft + boxWidth - 64;
         }
-        $("#gkr-preview-box").show().css("top",$("#gkr-faces-box").offset().top + 23).css("left",previewDivLeft).children("#gkr-preview-div").css("background-image","url('" + $.trim(url) + "')");
+        $("#gkr-preview-box").show().css("top",$("#gkr-faces-box").offset().top + moocOffsetTop + 23).css("left",previewDivLeft + moocOffsetLeft).children("#gkr-preview-div").css("background-image","url('" + $.trim(url) + "')");
     },400);
 }
 function hidePreview(){
