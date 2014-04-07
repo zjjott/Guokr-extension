@@ -65,16 +65,6 @@ function domChanged() {
     if($(toolBarSelector).length > 0){
         var toolBar = $($(toolBarSelector)[0]);
         var isMce = toolBar.hasClass("mce-flow-layout");
-        
-        // 设置MOOC学院的显示偏移        
-        var moocOffsetTop = 0;
-        var moocOffsetLeft = 0;
-        if(pageurl.indexOf("mooc.guokr.com") !=-1 ){
-            moocOffsetTop = -83;
-            moocOffsetLeft = -333;
-        }
-        
-        
         var editorSelector = isMce ? ".mce-edit-area" : ".edui-editor";
         
         /**
