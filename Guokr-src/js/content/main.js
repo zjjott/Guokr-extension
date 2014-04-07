@@ -58,18 +58,17 @@ function domChanged() {
             $("#gkr-hover-box:visible").fadeOut("fast");
         },800);
     });
-    var toolBars = ["div.edui-toolbar[addFaceDone!='true']",
-    "div#mce_13-body[addFaceDone!='true']"]
+    var toolBarSelector = "div.edui-toolbar[addFaceDone!='true'],div.mce-container-body.mce-flow-layout[addFaceDone!='true']";
 
     //功能按钮
-    toolBars.forEach(function(bar) {
+    //暂时有bug,问答页面有两个编辑器时会有冲突
+    if($(toolBarSelector).length > 0){
+        var toolBar = $($(toolBarSelector)[0]);
+        var isMce = toolBar.hasClass("mce-flow-layout");
         
-    
-    if($(bar).length > 0){
-        var toolBar = $($(bar)[0]);
-        if (bar.charAt(4)=="m") {
-            var editorSelector = "#mce_11-body"
-            var cpButton = $("<div tabIndex='998'  id='mce_19' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_19-body'></div></div>");
+        if (isMce) {
+            var editorSelector = ".mce-edit-area";
+            var cpButton = $("<div tabIndex='998'  id='mce_98' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_98-body'></div></div>");
             cpButton.children().css("width",25);
             cpButton.children().css("height",25);
             cpButton.children().css("background-position","3px 3px");
@@ -119,8 +118,8 @@ function domChanged() {
             });
         //果壳颜色功能已经被干掉,暂时隐藏颜色选择器
         //toolBar.append(cpButton);
-        if (bar.charAt(4)=="m") {
-            var moreFaceButton = $("<div tabIndex='999'  id='mce_20' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_19-body'></div></div>");
+        if (isMce) {
+            var moreFaceButton = $("<div tabIndex='999'  id='mce_99' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_99-body'></div></div>");
             moreFaceButton.children().css("width",25);
             moreFaceButton.children().css("height",25);
             moreFaceButton.children().css("background-position","3px 3px");
@@ -142,7 +141,7 @@ function domChanged() {
             if($("#gkr-faces-ul:empty").length > 0){
                 moreFaces = Faces.defaultMoreFaces[0].faces;
                 $.each(moreFaces,function(i,n){
-                    $("#gkr-faces-ul").append($("<li style='line-height:22px;height:22px;width:22px;padding:0px;float: left;'>").append(
+                    $("#gkr-faces-ul").append($("<li style='margin:0;line-height:22px;height:22px;width:22px;padding:0px;float: left;'>").append(
                         $("<a href='javascript:void(0);' style='display:block;float: left;height: 22px; width: 22px;background-size:22px 22px;background-position:1px 0px;' />")
                         .css("background-image","url('" + $.trim(n) + "')")
                         .click(function(){addFace($.trim(n));})
@@ -178,6 +177,7 @@ function domChanged() {
             hideFaceTimer = setTimeout(function(){$("#gkr-faces-box").hide();},500);
         }).hover(function(){//常用表情
             var morefaceLink = $(this);
+            log(morefaceLink)
             //200ms延迟显示
             showFaceTimer = setTimeout(function(){
                 //如果更多表情已经显示则不再显示常用表情
@@ -187,7 +187,7 @@ function domChanged() {
                 $("#gkr-faces-ul").empty();
                 if($("#gkr-faces-ul:empty").length > 0){
                     $.each(faces,function(i,n){
-                            $("#gkr-faces-ul").append($("<li style='line-height:22px;height:22px;width:22px;padding:0px;float: left;'>").append($("<a href='javascript:void(0);' style='display:block;float: left;height: 22px; width: 22px;background-size:22px 22px;background-position:1px 0px;' />").css("background-image","url('" + $.trim(n) + "')").click(function(){addFace($.trim(n));})));
+                            $("#gkr-faces-ul").append($("<li style='margin:0;line-height:22px;height:22px;width:22px;padding:0px;float: left;'>").append($("<a href='javascript:void(0);' style='display:block;float: left;height: 22px; width: 22px;background-size:22px 22px;background-position:1px 0px;' />").css("background-image","url('" + $.trim(n) + "')").click(function(){addFace($.trim(n));})));
                     });
                 }
                 try{morefaceLink.focus();}catch(e){}//Chrome需要调用focus()获取焦点,FF调用反而会抛出异常
@@ -205,7 +205,7 @@ function domChanged() {
                     triangleTop = -16;
                     trangleShape = {"border-color":"transparent transparent #2AA4CE transparent", "border-style":"dashed dashed solid dashed"}//up
                 }
-                
+                log(morefaceLink.offset().top + " top " + top + " facerows " + facerows);
                 $("#gkr-faces-div").css("width",(rowLength * 22) + 2);
                 $("#gkr-faces-box").show().css("width",(rowLength * 22) + 2)
                 .css("top",top)
@@ -224,7 +224,7 @@ function domChanged() {
         
         //表情分组与切换
         $.each(Faces.defaultMoreFaces,function(i,n){
-            $("#gkr-faces-groups-ul").append($("<li style='line-height:22px;height:22px;padding:0px 2px 0px 2px;float: left;'></li>").append($("<a index='" + i + "' href='javascript:void(0);'>"+ n.name +"</a>").click(function(){
+            $("#gkr-faces-groups-ul").append($("<li style='margin:0;line-height:22px;height:22px;padding:0px 2px 0px 2px;float: left;'></li>").append($("<a style='font-size: 12px;color: #0078b6' index='" + i + "' href='javascript:void(0);'>"+ n.name +"</a>").click(function(){
                 var index = parseInt($(this).attr("index"),10);
                 
                 
@@ -232,7 +232,7 @@ function domChanged() {
                 $("#gkr-faces-ul").empty();
                 if($("#gkr-faces-ul:empty").length > 0){
                     $.each(moreFaces,function(i,n){
-                        $("#gkr-faces-ul").append($("<li style='line-height:22px;height:22px;width:22px;padding:0px;float: left;'>").append(
+                        $("#gkr-faces-ul").append($("<li style='margin:0;line-height:22px;height:22px;width:22px;padding:0px;float: left;'>").append(
                             $("<a href='javascript:void(0);' style='display:block;float: left;height: 22px; width: 22px;background-size:22px 22px;background-position:1px 0px;' />")
                             .css("background-image","url('" + $.trim(n) + "')")
                             .click(function(){addFace($.trim(n));})
@@ -269,16 +269,15 @@ function domChanged() {
         });
         
         //短网址用于统计
-        toolBar.append($("<div id='countLink' class='edui-box edui-button' style='height:25px;width:0px;border-style:none;border-width:0px;background-size:21px 0px;background-position:2px 2px;color:#CECFCE;' >\
+        toolBar.append($("<div id='countLink' class='edui-box edui-button' style='width:0px;border-style:none;border-width:0px;background-size:21px 0px;background-position:2px 2px;color:#CECFCE;' >\
                               <div class='edui-box edui-icon' >\
                               </div>\
                           </div>").css("background-image","url('http://goo.gl/IkF5C')"));             
-        //$(".gui-ubb-links").attr("addFaceDone","true");
-        toolBar.attr("addFaceDone","true"); 
+        //目前只支持同一个页面上的第一个编辑器
+        $(toolBarSelector).attr("addFaceDone","true"); 
 
     }
 
-    })
 }
 
 
