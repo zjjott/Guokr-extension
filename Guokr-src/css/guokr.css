@@ -132,31 +132,39 @@
 #gkr-preview-box {
   display:none;
   position:absolute;
-  height:64px;
-  width:64px;
+  height:76px;
+  width:76px;
   z-index:9999;
 }
 
 #gkr-preview-div {
   background-color:white;
-  background-size:64px 64px;
+  /* 高度加border长度应该等于3个gkr-faces-li的总高度，宽度也一样 */
+  background-size:76px 76px;
   background-position:0px 0px; 
   border-color:#2AA4CE; 
   border-style:solid; 
   border-width:1px;
   padding:0px;
-  height:64px;
-  width:64px;
+  height:76px;
+  width:76px;
 }
 
 .gkr-faces-li {
   margin:0;
-  line-height:22px;
+  line-height:24px;
   height:24px;
   width:24px;
   border: 1px solid #e8e8e8;
   float: left;
 }
+.gkr-faces-li:hover{
+  border: 1px solid #0095cd;
+  background: #fff9ec;
+  position: relative;
+  z-index: 2;
+}
+
 .gkr-faces-li > a {
   display:block;
   float: left;

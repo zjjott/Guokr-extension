@@ -134,10 +134,11 @@ function domChanged() {
         }
         
         var moreFace = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/eb/smile.gif";
-		
-		var height = 24;
-        var width = 24;
-		
+        
+		// 这个是每个表情框的大小
+        var height = 26;
+        var width = 26;
+        
         //tabIndex属性帮助div获取焦点,处理foucs blur事件
         moreFaceButton.children().css("background-image","url('" + moreFace + "')");
         moreFaceButton.click(function(){

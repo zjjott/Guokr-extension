@@ -85,8 +85,10 @@ function showPreview(url,currentTarget){
         var previewDivLeft = $("#gkr-faces-box").offset().left;
         var currentTargetLeft = $(currentTarget).offset().left;
         var boxWidth = $("#gkr-faces-box").width();
+		var previewWidth = $("#gkr-preview-box").width();
         if(currentTargetLeft - previewDivLeft <  (boxWidth/2)){
-            previewDivLeft = previewDivLeft + boxWidth - 64;
+		// 靠右
+            previewDivLeft = previewDivLeft + boxWidth - previewWidth - 2;
         }
         $("#gkr-preview-box").show().css("top",$("#gkr-faces-box").offset().top + moocOffsetTop + 23).css("left",previewDivLeft + moocOffsetLeft).children("#gkr-preview-div").css("background-image","url('" + $.trim(url) + "')");
     },400);
