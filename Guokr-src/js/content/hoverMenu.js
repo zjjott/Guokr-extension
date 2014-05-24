@@ -40,11 +40,13 @@ Pinyin.get = function(l1){
 var HoverMenu = {};
 //小组菜单悬浮框
 HoverMenu.addGroupsMenu = function(){
-	$('<div id="gkr-groups-menu" style="font-size:12px;display:none;position:absolute;width:330px;z-index:9999;">\
-		<s id="gkr-groups-triangle" class="triangle" style="border-width: 8px;border-color:transparent transparent #85c155 transparent; border-style:dashed dashed solid dashed;position: absolute;left: 160px;top: -15px;"/>\
-		<div id="gkr-groups-div" style="background-color:white; border-color:#85c155; border-style:solid; border-width:1px;padding:2px;width:310px;">\
-		   <ul id="gkr-groups-searchfav-ul" style="height: 22px;border-width:1px;border-style:none none solid none;border-color:transparent transparent #85c155 transparent;">\
-			   <li style="float:left;width:95px;height:22px;"><input type="text" id="gkr-groups-searchbox" maxlength=8 placeholder="快速搜索" style="width:90px;"/></li>\
+	$('<div id="gkr-groups-menu">\
+		<s id="gkr-groups-triangle" class="triangle"/>\
+		<div id="gkr-groups-div">\
+		   <ul id="gkr-groups-searchfav-ul">\
+			   <li>\
+			       <input type="text" id="gkr-groups-searchbox" maxlength=8 placeholder="快速搜索"/>\
+			   </li>\
 		   </ul>\
 		   <ul id="gkr-groups-ul"/>\
 		</div>\
@@ -164,7 +166,7 @@ HoverMenu.addGroupsName = function(){
 				if(groupName.length > maxGroupName ){//限制中英混合或纯英文的不超过12个字符,thank to spacewander.
 					groupName = groupName.substr(0,maxGroupName - 1) + "…";
                 }
-				$("<li style='float:left;width:95px;height:22px;' pinyin='" + Pinyin.get(n.replace(/\s|\d|!/g,"")) + "'>\
+				$("<li pinyin='" + Pinyin.get(n.replace(/\s|\d|!/g,"")) + "'>\
 				<a href='" + i + "' title='"+ n +"'>" + groupName + "</a></li>").appendTo("#gkr-groups-ul");
 		});
 	});

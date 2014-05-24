@@ -6,7 +6,7 @@ function initBlockList() {
         var result = $await(asyncstore("ids"));
         var arr = result.split(",");
         $.each(arr,function(i,n){
-            if(n)$("#gk-pl-ids").append($("<li style='float:left'>").html(n).append($("<input type='button' title='取消屏蔽' value='x' style='width:16px'/>").click(function(){
+            if(n)$("#gk-pl-ids").append($("<li>").html(n).append($("<input type='button' title='取消屏蔽' value='x'/>").click(function(){
                 var asyncfunc1 = eval(Wind.compile("async", function () {
                     $await(removeBlocked("ids", n));
                     initBlockList();
@@ -16,14 +16,14 @@ function initBlockList() {
         });
     
         $.each(blockIDs,function(i,n){
-            if(n)$("#gk-pl-ids").append($("<li style='float:left'>").html(n));
+            if(n)$("#gk-pl-ids").append($("<li>").html(n));
         });
     
         var result = $await(asyncstore("strs"));
         var arr = result.split(",");
         $("#gk-pl-strs").empty();
         $.each(arr,function(i,n){
-            if(n){$("#gk-pl-strs").append($("<li style='float:left'>").html(n).append($("<input type='button' title='取消屏蔽' value='x' style='width:16px'/>").click(function(){
+            if(n){$("#gk-pl-strs").append($("<li>").html(n).append($("<input type='button' title='取消屏蔽' value='x'/>").click(function(){
                 var asyncfunc2 = eval(Wind.compile("async", function () {
                     $await(removeBlocked("strs", n));
                     initBlockList();
@@ -33,7 +33,7 @@ function initBlockList() {
         });
     
         $.each(blockStrs,function(i,n){
-            if(n)$("#gk-pl-strs").append($("<li style='float:left'>").html(n));
+            if(n)$("#gk-pl-strs").append($("<li>").html(n));
         });
     }));
     asyncfunc().start();
