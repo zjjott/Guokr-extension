@@ -6,6 +6,7 @@
   "content_scripts": [
     {
       "matches": ["http://*.guokr.com/*","https://*.guokr.com/*"],
+	  "css": ["css/guokr.css"],
       "js": ["js/jquery.min.js","js/content/wind-all-0.7.3.js",
             "js/content/externLinks.js","js/content/PinyinData.js","js/content/global.js","js/content/block.js",
             "js/content/editor.js","js/content/userHoverBox.js","js/content/hoverMenu.js","js/content/question.js",
