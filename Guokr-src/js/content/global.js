@@ -1,13 +1,13 @@
 //--------Global variable ------
 //开启/关闭日志输出
 var debugMode = true;
-// 持久化屏蔽ID列表, e.g. :   var blockIDs	 = ["0792011715","0020566516","0814609355","0637014415"];  
+// 持久化屏蔽ID列表, e.g. :   var blockIDs	 = ["0792011715","0020566516","0814609355","0637014415"];
 var blockIDs	 = [];
 // 持久化屏蔽关键词列表, e.g. : var blockStrs	 = ["中医","经络","针灸"];
 var blockStrs	 = [];
 // 常用表情(可以根据需要修改,注意最后一行没有逗号)
 var faces = [
-   
+
  ];
 
 //更多表情(可以根据需要修改,注意最后一行没有逗号)
@@ -35,12 +35,19 @@ var colors = ["ffffff","ffccc9","ffce93","fffc9e","ffffc7","9aff99","96fffb","cd
                 "329a9d","3531ff","6200c9","343434","680100","963400","986536","646809","036400","34696d","00009b",
                 "303498","000000","330001","643403","663234","343300","013300","003532","010066","340096"];
 
+// 子域名
+var subdomain = "guokr"; // "guokr"表示主站,"mooc"表示MOOC学院,"sex"表示知性社区
+
 //MOOC学院的显示偏移
 var moocOffsetTop = 0;
 var moocOffsetLeft = 0;
 if(pageurl.indexOf("mooc.guokr.com") !=-1 ){
     moocOffsetTop = -85;
-    moocOffsetLeft = -341;
+    moocOffsetLeft = -178;
+    subdomain = "mooc";
+}
+else if (pageurl.indexOf("sex.guokr.com") != -1) {
+    subdomain = "sex";
 }
 
 //--------Util--------
@@ -60,7 +67,7 @@ var asyncstore = function(key, value) {
 	if (value) {// 异步存储
         var obj = {};
         obj[key] = encodeURIComponent(value);
-        log("set:" + value);     
+        log("set:" + value);
         return Wind.Async.Task.create(function(t){
             chrome.storage.local.set(obj, function() {
                 t.complete("success", obj);
@@ -70,7 +77,7 @@ var asyncstore = function(key, value) {
 	} else {// 异步读取
         return Wind.Async.Task.create(function(t){
             chrome.storage.local.get(key, function(data) {
-                var rtnValue = ""; 
+                var rtnValue = "";
                 try {rtnValue = (data[key] ? decodeURIComponent(data[key]) : "");} catch (e) {}
                 t.complete("success", rtnValue);
             });

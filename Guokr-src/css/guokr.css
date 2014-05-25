@@ -8,9 +8,9 @@
 }
 
 #gkr-groups-div {
-  background-color:white; 
-  border-color:#85c155; 
-  border-style:solid; 
+  background-color:white;
+  border-color:#85c155;
+  border-style:solid;
   border-width:1px;
   padding:2px;
   width:310px;
@@ -41,7 +41,7 @@
 
 #gkr-groups-triangle {
   border-width: 8px;
-  border-color:transparent transparent #85c155 transparent; 
+  border-color:transparent transparent #85c155 transparent;
   border-style:dashed dashed solid dashed;
   position: absolute;
   left: 160px;
@@ -49,17 +49,17 @@
 }
 
 #gkr-hover-box {
-  position:absolute; 
-  display:none; 
-  z-index:9999;  
-  width:250px; 
+  position:absolute;
+  display:none;
+  z-index:9999;
+  width:250px;
   height:120px;
   font-size: 12px;
 }
 
 #gkr-hover-triangle {
   border-width: 6px;
-  border-color:green transparent transparent transparent; 
+  border-color:green transparent transparent transparent;
   border-style:solid dashed dashed dashed;
   position: absolute;
   left: 20px;
@@ -67,9 +67,9 @@
 }
 
 #gkr-hover-board  {
-  background-color:white; 
-  border-color:green; 
-  border-style:solid; 
+  background-color:white;
+  border-color:green;
+  border-style:solid;
   border-width:1px;
   height:113px;
 }
@@ -114,9 +114,9 @@
 }
 
 #gkr-faces-div {
-  background-color:white; 
-  border-color:#2AA4CE; 
-  border-style:solid; 
+  background-color:white;
+  border-color:#2AA4CE;
+  border-style:solid;
   border-width:1px;
   padding:0px;
   width:310px;
@@ -141,11 +141,11 @@
   background-color:white;
   /* 高度加border长度应该等于3个gkr-faces-li的总高度，宽度也一样 */
   background-size:76px 76px;
-  background-position:0px 0px; 
-  border-color:#2AA4CE; 
-  border-style:solid; 
+  background-position:0 0;
+  border-color:#2AA4CE;
+  border-style:solid;
   border-width:1px;
-  padding:0px;
+  padding:0;
   height:76px;
   width:76px;
 }
@@ -168,7 +168,7 @@
 .gkr-faces-li > a {
   display:block;
   float: left;
-  height: 22px; 
+  height: 22px;
   width: 22px;
   background-size:22px 22px;
   background-position:1px 0px;
@@ -178,12 +178,11 @@
   margin:0;
   line-height:22px;
   height:22px;
-  padding:0px 2px 0px 2px;
+  padding:0 2px 0 2px;
   float: left;
-}
-.gkr-faces-groups-li > a {
-  font-size: 12px;
-  color: #0078b6;
+  border-width:1px;
+  border-style:none none solid;
+  border-color:transparent transparent #2AA4CE;
 }
 
 /* 设置页面上的屏蔽设置 */
@@ -203,3 +202,4 @@
 #gk-pl-ids input[value='x'], #gk-pl-strs input[value='x'] {
   width:16px;
 }
+
