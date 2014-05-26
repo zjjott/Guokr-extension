@@ -1,0 +1,214 @@
+/* 全局链接样式 */
+a {
+  color: #0078b6;
+  text-decoration: none;
+}
+/* guokr css : 应用在由增强拓展中加入页面的内容上 */
+#gkr-groups-menu {
+  font-size:12px;
+  display:none;
+  position:absolute;
+  width:330px;
+  z-index:9999;
+}
+
+#gkr-groups-div {
+  background-color:white;
+  border-color:#85c155;
+  border-style:solid;
+  border-width:1px;
+  padding:2px;
+  width:310px;
+}
+
+#gkr-groups-searchfav-ul {
+  height: 22px;
+  border-width:1px;
+  border-style:none none solid none;
+  border-color:transparent transparent #85c155 transparent;
+}
+
+#gkr-groups-searchbox {
+  width:90px;
+  font-size: 12px;
+  padding: 0;
+  margin: 0;
+  vertical-align: baseline;
+}
+
+#gkr-groups-ul > li {
+  float:left;
+  width:95px;
+  height:22px;
+}
+
+#gkr-groups-ul a {
+  color:#0078b6;
+  text-decoration:none;
+  line-height:1.5;
+}
+
+#gkr-groups-triangle {
+  border-width: 8px;
+  border-color:transparent transparent #85c155 transparent;
+  border-style:dashed dashed solid dashed;
+  position: absolute;
+  left: 160px;
+  top: -15px;
+}
+
+#gkr-hover-box {
+  position:absolute;
+  display:none;
+  z-index:9999;
+  width:250px;
+  height:120px;
+  font-size: 12px;
+}
+
+#gkr-hover-triangle {
+  border-width: 6px;
+  border-color:green transparent transparent transparent;
+  border-style:solid dashed dashed dashed;
+  position: absolute;
+  left: 20px;
+  top: 114px;
+}
+
+#gkr-hover-board  {
+  background-color:white;
+  border-color:green;
+  border-style:solid;
+  border-width:1px;
+  height:113px;
+}
+#gkr-hover-board >  table {
+  border-collapse: separate;
+  padding:10px;
+}
+
+#gkr-hover-link {
+  color: rgb(0, 102, 153);
+}
+
+#gkr-hover-notes {
+  width:160px;
+  height:20px;
+}
+
+.mw_btn-ext {
+  float:right;
+}
+
+#gkr-hover-block {
+  margin-right:0px;
+  margin-left:10px;
+}
+
+#gkr-faces-box {
+  font-size:12px;
+  display:none;
+  position:absolute;
+  width:310px;
+  z-index:9999;
+}
+
+#gkr-faces-triangle {
+  border-width: 8px;
+  border-color:#2AA4CE transparent transparent transparent;
+  border-style:solid dashed dashed dashed;
+  position: absolute;
+  left: 20px;
+  top: 164px;
+}
+
+#gkr-faces-div {
+  background-color:white;
+  border-color:#2AA4CE;
+  border-style:solid;
+  border-width:1px;
+  padding:0px;
+  width:310px;
+}
+
+#gkr-faces-groups-ul {
+  height: 22px;
+  border-width:1px;
+  border-style:none none solid none;
+  border-color:transparent transparent #2AA4CE transparent;
+}
+
+#gkr-preview-box {
+  display:none;
+  position:absolute;
+  height:76px;
+  width:76px;
+  z-index:9999;
+}
+
+#gkr-preview-div {
+  background-color:white;
+  /* 高度加border长度应该等于3个gkr-faces-li的总高度，宽度也一样 */
+  background-size:76px 76px;
+  background-position:0 0;
+  border-color:#2AA4CE;
+  border-style:solid;
+  border-width:1px;
+  padding:0;
+  height:76px;
+  width:76px;
+}
+
+.gkr-faces-li {
+  margin:0;
+  line-height:24px;
+  height:24px;
+  width:24px;
+  border: 1px solid #e8e8e8;
+  float: left;
+}
+.gkr-faces-li:hover{
+  border: 1px solid #0095cd;
+  background: #fff9ec;
+  position: relative;
+  z-index: 2;
+}
+
+.gkr-faces-li > a {
+  display:block;
+  float: left;
+  height: 22px;
+  width: 22px;
+  background-size:22px 22px;
+  background-position:1px 0px;
+}
+
+.gkr-faces-groups-li {
+  margin:0;
+  line-height:22px;
+  height:22px;
+  padding:0 2px 0 2px;
+  float: left;
+  border-width:1px;
+  border-style:none none solid;
+  border-color:transparent transparent #2AA4CE;
+}
+
+/* 设置页面上的屏蔽设置 */
+#gk-pl-content {
+  display:block;
+}
+
+#gk-pl-main > fieldset {
+  border: 1px solid #c0c0c0;
+  padding: .35em .625em .75em
+}
+
+#gk-pl-ids > li， #gk-pl-strs > li {
+  float:left;
+}
+
+#gk-pl-ids input[value='x'], #gk-pl-strs input[value='x'] {
+  width:16px;
+}
+
