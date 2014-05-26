@@ -185,17 +185,21 @@ function domChanged() {
             height = height ? height : 22;
             log(morefaceLink);
             var top = morefaceLink.offset().top + subdomainOffsetTop - facerows*height - 36 - 22;
+            var left = morefaceLink.offset().left + subdomainOffsetLeft - 170;
             var triangleTop = facerows * height + 44;
             var trangleShape = {"border-color":"#2AA4CE transparent transparent transparent", "border-style":"solid dashed dashed dashed"};//down
             if($(editorSelector).offset().left < 10){//编辑器全屏
                 top = morefaceLink.offset().top + subdomainOffsetTop + 40;
                 triangleTop = -16;
+                if (subdomain === 'science' || subdomain === 'mooc') {
+                    left -= 8;
+                }
                 trangleShape = {"border-color":"transparent transparent #2AA4CE transparent", "border-style":"dashed dashed solid dashed"};//up
             }
             $("#gkr-faces-div").css("width",(rowLength * width) + 2);
             $("#gkr-faces-box").show().css("width",(rowLength * width) + 2)
             .css("top",top)
-            .css("left",morefaceLink.offset().left + subdomainOffsetLeft - 170)
+            .css("left",left)
             .children("#gkr-faces-triangle").css("left",170+5)
             .css("top",triangleTop)
             .css(trangleShape);
@@ -240,17 +244,21 @@ function domChanged() {
                 width = width ? width : 22;
                 height = height ? height : 22;
                 var top = morefaceLink.offset().top + subdomainOffsetTop - facerows*width - 36;
+                var left = morefaceLink.offset().left + subdomainOffsetLeft - 40;
                 var triangleTop = facerows * width + 22;
                 var trangleShape = {"border-color":"#2AA4CE transparent transparent transparent", "border-style":"solid dashed dashed dashed"};//down
                 if($(editorSelector).offset().left < 10){//编辑器全屏
                     top = morefaceLink.offset().top + subdomainOffsetTop + 40;
                     triangleTop = -16;
+                    if (subdomain === 'science' || subdomain === 'mooc') {
+                        left -= 8;
+                    }
                     trangleShape = {"border-color":"transparent transparent #2AA4CE transparent", "border-style":"dashed dashed solid dashed"};//up
                 }
                 $("#gkr-faces-div").css("width",(rowLength * width) + 2);
                 $("#gkr-faces-box").show().css("width",(rowLength * width) + 2)
                 .css("top",top)
-                .css("left",morefaceLink.offset().left + subdomainOffsetLeft - 40)
+                .css("left",left)
                 .children("#gkr-faces-triangle").css("left", 40 + 5)
                 .css("top",triangleTop)
                 .css(trangleShape);
@@ -301,16 +309,20 @@ function domChanged() {
                 height = height ? height : 24;
                 var top = moreFaceButton.offset().top + subdomainOffsetTop - facerows*height - 36 - 22;
                 var triangleTop = facerows * height + 44;
+                var left = moreFaceButton.offset().left + subdomainOffsetLeft - 210 + 70;
                 var trangleShape = {"border-color":"#2AA4CE transparent transparent transparent", "border-style":"solid dashed dashed dashed"}//down
                 if($(editorSelector).offset().left < 10){//编辑器全屏
                     top = moreFaceButton.offset().top + subdomainOffsetTop + 40;
                     triangleTop = -16;
+                    if (subdomain === 'science' || subdomain === 'mooc') {
+                        left -= 8;
+                    }
                     trangleShape = {"border-color":"transparent transparent #2AA4CE transparent", "border-style":"dashed dashed solid dashed"}//up
                 }
 
                 $("#gkr-faces-box").show().css("width",(rowLength * width) + 2)
                 .css("top",top)
-                .css("left",moreFaceButton.offset().left + subdomainOffsetLeft - 210 + 70)
+                .css("left",left)
                 .children("#gkr-faces-triangle")
                 .css("left",210-70+5)
                 .css("top",triangleTop)

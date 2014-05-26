@@ -43,12 +43,12 @@ var subdomainOffsetTop = 0;
 var subdomainOffsetLeft = 0;
 if(pageurl.indexOf("mooc.guokr.com") !=-1 ){
     subdomainOffsetTop = -85;
-    subdomainOffsetLeft = -341;
+    subdomainOffsetLeft = -178;
     subdomain = "mooc";
 }
 else if(pageurl.indexOf("www.guokr.com/article/") !=-1 ){
     subdomainOffsetTop = -132;
-    subdomainOffsetLeft = -339;
+    subdomainOffsetLeft = -175;
     subdomain = "science";
 }
 else if (pageurl.indexOf("sex.guokr.com") != -1) {
@@ -59,7 +59,7 @@ else if (pageurl.indexOf("sex.guokr.com") != -1) {
 else {
     subdomainOffsetTop = 0;
     subdomainOffsetLeft = 0;
-    subdomain = "guokr"
+    subdomain = "guokr";
 }
 
 //--------Util--------
