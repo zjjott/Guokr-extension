@@ -10,7 +10,7 @@ Editor.addFacesBox = function(){
         </div>\
     </div>'
     ).appendTo($(document.body).children(".container"));
-}
+};
 
 //表情预览悬浮框
 Editor.addFacesPreviousBox = function(){
@@ -18,7 +18,7 @@ Editor.addFacesPreviousBox = function(){
         <div id="gkr-preview-div"/>\
     </div>'
     ).appendTo($(document.body).children(".container"));
-}
+};
 
 //颜色选择器悬浮框
 Editor.addColorPicker = function(){
@@ -28,7 +28,7 @@ Editor.addColorPicker = function(){
         <div style="background-color:transparent;height:7px"/>\
     </div>'
     ).appendTo($(document.body).children(".container"));
-}
+};
 
 //获取可视化模式文本区域
 function getViewObject(){
@@ -90,7 +90,12 @@ function showPreview(url,currentTarget){
 		// 靠右
             previewDivLeft = previewDivLeft + boxWidth - previewWidth - 2;
         }
-        $("#gkr-preview-box").show().css("top",$("#gkr-faces-box").offset().top + subdomainOffsetTop + 23).css("left",previewDivLeft + subdomainOffsetLeft).children("#gkr-preview-div").css("background-image","url('" + $.trim(url) + "')");
+        var top = $("#gkr-faces-box").offset().top + subdomainOffsetTop + 23;
+        var left = previewDivLeft + subdomainOffsetLeft;
+        if (subdomain === "science" || subdomain === "mooc") {
+            left -= 8;
+        }
+        $("#gkr-preview-box").show().css("top",top).css("left",left).children("#gkr-preview-div").css("background-image","url('" + $.trim(url) + "')");
     },400);
 }
 function hidePreview(){
