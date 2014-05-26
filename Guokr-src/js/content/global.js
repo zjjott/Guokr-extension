@@ -38,16 +38,28 @@ var colors = ["ffffff","ffccc9","ffce93","fffc9e","ffffc7","9aff99","96fffb","cd
 // 子域名
 var subdomain = "guokr"; // "guokr"表示主站,"mooc"表示MOOC学院,"sex"表示知性社区
 
-//MOOC学院的显示偏移
-var moocOffsetTop = 0;
-var moocOffsetLeft = 0;
+//MOOC学院的显示偏移&科学人的显示偏移
+var subdomainOffsetTop = 0;
+var subdomainOffsetLeft = 0;
 if(pageurl.indexOf("mooc.guokr.com") !=-1 ){
-    moocOffsetTop = -85;
-    moocOffsetLeft = -178;
+    subdomainOffsetTop = -85;
+    subdomainOffsetLeft = -341;
     subdomain = "mooc";
 }
+else if(pageurl.indexOf("www.guokr.com/article/") !=-1 ){
+    subdomainOffsetTop = -132;
+    subdomainOffsetLeft = -339;
+    subdomain = "science";
+}
 else if (pageurl.indexOf("sex.guokr.com") != -1) {
+    subdomainOffsetTop = 0;
+    subdomainOffsetLeft = 0;
     subdomain = "sex";
+}
+else {
+    subdomainOffsetTop = 0;
+    subdomainOffsetLeft = 0;
+    subdomain = "guokr"
 }
 
 //--------Util--------

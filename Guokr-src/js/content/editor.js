@@ -90,7 +90,7 @@ function showPreview(url,currentTarget){
 		// 靠右
             previewDivLeft = previewDivLeft + boxWidth - previewWidth - 2;
         }
-        $("#gkr-preview-box").show().css("top",$("#gkr-faces-box").offset().top + moocOffsetTop + 23).css("left",previewDivLeft + moocOffsetLeft).children("#gkr-preview-div").css("background-image","url('" + $.trim(url) + "')");
+        $("#gkr-preview-box").show().css("top",$("#gkr-faces-box").offset().top + subdomainOffsetTop + 23).css("left",previewDivLeft + subdomainOffsetLeft).children("#gkr-preview-div").css("background-image","url('" + $.trim(url) + "')");
     },400);
 }
 function hidePreview(){

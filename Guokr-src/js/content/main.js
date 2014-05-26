@@ -183,18 +183,19 @@ function domChanged() {
             var height = $(".gkr-faces-li").outerHeight();
             width = width ? width : 22;
             height = height ? height : 22;
-            var top = morefaceLink.offset().top + moocOffsetTop - facerows*height - 36 - 22;
+            log(morefaceLink);
+            var top = morefaceLink.offset().top + subdomainOffsetTop - facerows*height - 36 - 22;
             var triangleTop = facerows * height + 44;
             var trangleShape = {"border-color":"#2AA4CE transparent transparent transparent", "border-style":"solid dashed dashed dashed"};//down
             if($(editorSelector).offset().left < 10){//编辑器全屏
-                top = morefaceLink.offset().top + moocOffsetTop + 40;
+                top = morefaceLink.offset().top + subdomainOffsetTop + 40;
                 triangleTop = -16;
                 trangleShape = {"border-color":"transparent transparent #2AA4CE transparent", "border-style":"dashed dashed solid dashed"};//up
             }
             $("#gkr-faces-div").css("width",(rowLength * width) + 2);
             $("#gkr-faces-box").show().css("width",(rowLength * width) + 2)
             .css("top",top)
-            .css("left",morefaceLink.offset().left + moocOffsetLeft - 170)
+            .css("left",morefaceLink.offset().left + subdomainOffsetLeft - 170)
             .children("#gkr-faces-triangle").css("left",170+5)
             .css("top",triangleTop)
             .css(trangleShape);
@@ -238,18 +239,18 @@ function domChanged() {
                 var height = $(".gkr-faces-li").outerHeight();
                 width = width ? width : 22;
                 height = height ? height : 22;
-                var top = morefaceLink.offset().top + moocOffsetTop - facerows*width - 36;
+                var top = morefaceLink.offset().top + subdomainOffsetTop - facerows*width - 36;
                 var triangleTop = facerows * width + 22;
                 var trangleShape = {"border-color":"#2AA4CE transparent transparent transparent", "border-style":"solid dashed dashed dashed"};//down
                 if($(editorSelector).offset().left < 10){//编辑器全屏
-                    top = morefaceLink.offset().top + moocOffsetTop + 40;
+                    top = morefaceLink.offset().top + subdomainOffsetTop + 40;
                     triangleTop = -16;
                     trangleShape = {"border-color":"transparent transparent #2AA4CE transparent", "border-style":"dashed dashed solid dashed"};//up
                 }
                 $("#gkr-faces-div").css("width",(rowLength * width) + 2);
                 $("#gkr-faces-box").show().css("width",(rowLength * width) + 2)
                 .css("top",top)
-                .css("left",morefaceLink.offset().left + moocOffsetLeft - 40)
+                .css("left",morefaceLink.offset().left + subdomainOffsetLeft - 40)
                 .children("#gkr-faces-triangle").css("left", 40 + 5)
                 .css("top",triangleTop)
                 .css(trangleShape);
@@ -298,18 +299,18 @@ function domChanged() {
                 var height = $(".gkr-faces-li").outerHeight();
                 width = width ? width : 24;
                 height = height ? height : 24;
-                var top = moreFaceButton.offset().top + moocOffsetTop - facerows*height - 36 - 22;
+                var top = moreFaceButton.offset().top + subdomainOffsetTop - facerows*height - 36 - 22;
                 var triangleTop = facerows * height + 44;
                 var trangleShape = {"border-color":"#2AA4CE transparent transparent transparent", "border-style":"solid dashed dashed dashed"}//down
                 if($(editorSelector).offset().left < 10){//编辑器全屏
-                    top = moreFaceButton.offset().top + moocOffsetTop + 40;
+                    top = moreFaceButton.offset().top + subdomainOffsetTop + 40;
                     triangleTop = -16;
                     trangleShape = {"border-color":"transparent transparent #2AA4CE transparent", "border-style":"dashed dashed solid dashed"}//up
                 }
 
                 $("#gkr-faces-box").show().css("width",(rowLength * width) + 2)
                 .css("top",top)
-                .css("left",moreFaceButton.offset().left + moocOffsetLeft - 210 + 70)
+                .css("left",moreFaceButton.offset().left + subdomainOffsetLeft - 210 + 70)
                 .children("#gkr-faces-triangle")
                 .css("left",210-70+5)
                 .css("top",triangleTop)

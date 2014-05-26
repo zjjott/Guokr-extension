@@ -25,6 +25,10 @@
 
 #gkr-groups-searchbox {
   width:90px;
+  font-size: 12px;
+  padding: 0;
+  margin: 0;
+  vertical-align: baseline;
 }
 
 #gkr-groups-ul > li {
