@@ -48,7 +48,7 @@ function domChanged() {
                 var result = $await(asyncstore("gkr-user-notes"));
                 var note = json2obj(result)[id];
                 $("#gkr-hover-notes").val(note ? note : "");//FF,Chrome不处理undefined
-                $("#gkr-hover-box:hidden").css("top",img.offset().top - 120).css("left",img.offset().left).fadeIn("fast").children("#gkr-hover-triangle").css("left",img.attr("width")/2-6);
+                $("#gkr-hover-box:hidden").css("top",img.offset().top + subdomainOffsetTop - 120).css("left",img.offset().left + subdomainOffsetLeft).fadeIn("fast").children("#gkr-hover-triangle").css("left",img.attr("width")/2-6);
             }));
             asyncfunc().start();
         },800);
