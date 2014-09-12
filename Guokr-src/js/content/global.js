@@ -39,30 +39,40 @@ var colors = ["ffffff","ffccc9","ffce93","fffc9e","ffffc7","9aff99","96fffb","cd
 var subdomain = "guokr"; // "guokr"表示主站,"mooc"表示MOOC学院,"sex"表示知性社区
 
 //MOOC学院的显示偏移&科学人的显示偏移
-var subdomainOffsetTop = 0;
-var subdomainOffsetLeft = 0;
 if(pageurl.indexOf("mooc.guokr.com") !=-1 ){
-    subdomainOffsetTop = -85;
-    subdomainOffsetLeft = -341;
     subdomain = "mooc";
-}
-else if(pageurl.indexOf("www.guokr.com/article/") !=-1 ){
-    subdomainOffsetTop = -132;
-    subdomainOffsetLeft = -339;
+} else if(pageurl.indexOf("www.guokr.com/article/") !=-1 ){
     subdomain = "science";
-}
-else if (pageurl.indexOf("sex.guokr.com") != -1) {
-    subdomainOffsetTop = 0;
-    subdomainOffsetLeft = 0;
+} else if (pageurl.indexOf("sex.guokr.com") != -1) {
     subdomain = "sex";
-}
-else {
-    subdomainOffsetTop = 0;
-    subdomainOffsetLeft = 0;
+} else {
     subdomain = "guokr"
 }
 
 //--------Util--------
+function getContainerObj(){
+//    var containerSelector = ".gwrap, .wrap"; // 主页面container元素的选择器.gwrap 是主站, .wrap是mooc学院
+//    var container = $(document.body).children(containerSelector);
+//    if(container.length == 0){
+//    	container = $(document.body).children(".container"); 
+//    }
+	//对话框不加到body里各个画面布局有问题. 暂时先加到body里了.
+	return $(document.body);
+}
+
+function getIdFromUrl(url) {
+	return url.replace("http://www.guokr.com/i/","").replace("http://www.guokr.com/group/i/","").replace(/\//g,"");
+}
+
+//绝对定位 via: http://www.cnblogs.com/jianfangkk/archive/2011/12/30/2307172.html
+function getAbsPos(elem) {
+	var left = elem.getBoundingClientRect().left+document.body.scrollLeft;
+	var top = elem.getBoundingClientRect().top+document.body.scrollTop;
+	var pos = {}; pos.top = top; pos.left = left;
+	return pos;
+}
+
+
 function store(key, value) {
     if (value) {//存储
         console.warn("store func is deprecated!!!");
