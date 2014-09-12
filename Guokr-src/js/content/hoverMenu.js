@@ -65,7 +65,6 @@ HoverMenu.showGroupsMenu = function(){
 	$("ul.gh-nav a[href='http://www.guokr.com/group/user/recent_replies/']").hover(function(){
 		clearTimeout(showGroupTimer);
 		var groupLink = $(this);
-		log("hover");
 		showGroupTimer = setTimeout(function(){
 			var rowLength = 5;
 			var groups = $("#gkr-groups-ul").children().length;

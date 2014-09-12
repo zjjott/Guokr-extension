@@ -50,7 +50,6 @@ function domChanged() {
                 var note = json2obj(result)[id];
                 $("#gkr-hover-notes").val(note ? note : "");//FF,Chrome不处理undefined
                 var imgAbsPos = getAbsPos(img[0]);
-                log(imgAbsPos);
                 $("#gkr-hover-box:hidden").css("top",imgAbsPos.top - 120).css("left",imgAbsPos.left).fadeIn("fast").children("#gkr-hover-triangle").css("left",img.attr("width")/2-6);
             }));
             asyncfunc().start();
@@ -323,7 +322,6 @@ function domChanged() {
                 .css("left",210-70+5)
                 .css("top",triangleTop)
                 .css(trangleShape);
-                log(facerows*height +20);
                 $("#gkr-faces-ul").css("height",facerows*height +20);
             })));
         });

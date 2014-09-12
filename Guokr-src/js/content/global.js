@@ -40,7 +40,6 @@ var subdomain = "guokr"; // "guokr"表示主站,"mooc"表示MOOC学院,"sex"表�
 
 var containerSelector = ".gwrap, .wrap, .container"; // 主页面container元素的选择器.gwrap 是主站, .wrap是mooc学院
 
-//TODO: 改造定位方式 不要偏移量 http://www.cnblogs.com/jianfangkk/archive/2011/12/30/2307172.html
 //MOOC学院的显示偏移&科学人的显示偏移
 if(pageurl.indexOf("mooc.guokr.com") !=-1 ){
     subdomain = "mooc";
@@ -57,6 +56,7 @@ function getIdFromUrl(url) {
 	return url.replace("http://www.guokr.com/i/","").replace("http://www.guokr.com/group/i/","").replace(/\//g,"");
 }
 
+//绝对定位 via: http://www.cnblogs.com/jianfangkk/archive/2011/12/30/2307172.html
 function getAbsPos(elem) {
 	var left = elem.getBoundingClientRect().left+document.body.scrollLeft;
 	var top = elem.getBoundingClientRect().top+document.body.scrollTop;
