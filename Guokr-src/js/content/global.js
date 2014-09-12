@@ -51,12 +51,13 @@ if(pageurl.indexOf("mooc.guokr.com") !=-1 ){
 
 //--------Util--------
 function getContainerObj(){
-    var containerSelector = ".gwrap, .wrap"; // 主页面container元素的选择器.gwrap 是主站, .wrap是mooc学院
-    var container = $(document.body).children(containerSelector);
-    if(container.length == 0){
-    	container = $(document.body).children(".container"); 
-    }
-	return container;
+//    var containerSelector = ".gwrap, .wrap"; // 主页面container元素的选择器.gwrap 是主站, .wrap是mooc学院
+//    var container = $(document.body).children(containerSelector);
+//    if(container.length == 0){
+//    	container = $(document.body).children(".container"); 
+//    }
+	//对话框不加到body里各个画面布局有问题. 暂时先加到body里了.
+	return $(document.body);
 }
 
 function getIdFromUrl(url) {

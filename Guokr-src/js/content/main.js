@@ -61,10 +61,10 @@ function domChanged() {
         },800);
     });
     var toolBarSelector = "div.edui-toolbar[addFaceDone!='true'],div.mce-container-body.mce-flow-layout[addFaceDone!='true']";
-
+    var addedToolBar = "div.edui-toolbar[addFaceDone='true'],div.mce-container-body.mce-flow-layout[addFaceDone='true']";
     //功能按钮
     //TODO: 暂时有bug,问答页面有两个编辑器时会有冲突
-    if($(toolBarSelector).length > 0){
+    if($(toolBarSelector).length > 0 && $(addedToolBar).length == 0){
         var toolBar = $($(toolBarSelector)[0]);
         var isMce = toolBar.hasClass("mce-flow-layout");
         var editorSelector = isMce ? ".mce-edit-area" : ".edui-editor";
