@@ -82,15 +82,16 @@ function addColor(color) {
 function showPreview(url,currentTarget){
     showPreviewTimer = setTimeout(function(){
         //计算靠左还是靠右显示预览图
-        var previewDivLeft = $("#gkr-faces-box").offset().left;
-        var currentTargetLeft = $(currentTarget).offset().left;
+    	var boxAbsPos = getAbsPos($("#gkr-faces-box")[0]);
+        var previewDivLeft = boxAbsPos.left;
+        var currentTargetLeft = getAbsPos(currentTarget).left;
         var boxWidth = $("#gkr-faces-box").width();
 		var previewWidth = $("#gkr-preview-box").width();
         if(currentTargetLeft - previewDivLeft <  (boxWidth/2)){
 		// 靠右
-            previewDivLeft = previewDivLeft + boxWidth - previewWidth - 2;
+            previewDivLeft = previewDivLeft + boxWidth - previewWidth;
         }
-        $("#gkr-preview-box").show().css("top",$("#gkr-faces-box").offset().top + subdomainOffsetTop + 23).css("left",previewDivLeft + subdomainOffsetLeft).children("#gkr-preview-div").css("background-image","url('" + $.trim(url) + "')");
+        $("#gkr-preview-box").show().css("top",boxAbsPos.top + 23).css("left",previewDivLeft).children("#gkr-preview-div").css("background-image","url('" + $.trim(url) + "')");
     },400);
 }
 function hidePreview(){
