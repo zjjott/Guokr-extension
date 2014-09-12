@@ -38,6 +38,9 @@ var colors = ["ffffff","ffccc9","ffce93","fffc9e","ffffc7","9aff99","96fffb","cd
 // 子域名
 var subdomain = "guokr"; // "guokr"表示主站,"mooc"表示MOOC学院,"sex"表示知性社区
 
+var containerSelector = ".gwrap, .wrap"; // 主页面container元素的选择器.gwrap 是主站, .wrap是mooc学院
+
+//TODO: 改造定位方式 不要偏移量 http://www.cnblogs.com/jianfangkk/archive/2011/12/30/2307172.html
 //MOOC学院的显示偏移&科学人的显示偏移
 var subdomainOffsetTop = 0;
 var subdomainOffsetLeft = 0;
@@ -63,6 +66,11 @@ else {
 }
 
 //--------Util--------
+function getIdFromUrl(url) {
+	return url.replace("http://www.guokr.com/i/","").replace("http://www.guokr.com/group/i/","").replace(/\//g,"");
+}
+
+
 function store(key, value) {
     if (value) {//存储
         console.warn("store func is deprecated!!!");

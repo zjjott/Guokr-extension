@@ -20,13 +20,13 @@ function domChanged() {
         var strsPlus = strsResult.split(",").concat(blockStrs);
         var idsResult = $await(asyncstore("ids"));
         var idsPlus = idsResult.split(",").concat(blockIDs);
-        $(".container").find("li a,dd a,li * a,dd * a,dl * a").filter(":visible").each(function(){
+        $(containerSelector).find("li a,dd a,li * a,dd * a,dl * a").filter(":visible").each(function(){
             var a = $(this);
             var text = a.text();
             $.each(strsPlus,function(i,n){if(n && text.indexOf(n) != -1){a.closest("li,dd,dl").hide();return false;}});
             var href = a.attr("href");
             if(href && a.parent().attr("class") != "titles-b-r"){//最后回复者不作为过滤条件
-                var id = href.replace("http://www.guokr.com/i/","").replace(/\//g,"");
+                var id = getIdFromUrl(href);
                 if(id && $.inArray(id,idsPlus) != -1){a.closest("li,dd,dl").hide();}
             }
         });
@@ -34,13 +34,14 @@ function domChanged() {
     blocking().start();
 
     //悬浮框
-    $("a[href^='http://www.guokr.com/i/']").children("img[hoverBoxAdded!='true']").attr("hoverBoxAdded","true").hover(function(){
+    var thumbnailSelector = "a[href^='http://www.guokr.com/i/'],a[href^='http://www.guokr.com/group/i/']";
+    $(thumbnailSelector).children("img[hoverBoxAdded!='true']").attr("hoverBoxAdded","true").hover(function(){
         var img = $(this);
         var parent = $(this).parent();
         clearTimeout(outTimer);
         hoverTimer = setTimeout(function(){
             var asyncfunc = eval(Wind.compile("async", function () {
-                var id = parent.attr("href").toString().replace("http://www.guokr.com/i/","").replace(/\//g,"");
+                var id = getIdFromUrl(parent.attr("href").toString());
                 $("#gkr-hover-box").hide().data("userId",id);
                 $("#gkr-hover-link").attr("href",parent.attr("href")).html(parent.text() + parent.attr("title"));
                 $("#gkr-hover-link:empty").html(parent.next(".lu_txt").text() + $(".post_user").text());
@@ -61,7 +62,7 @@ function domChanged() {
     var toolBarSelector = "div.edui-toolbar[addFaceDone!='true'],div.mce-container-body.mce-flow-layout[addFaceDone!='true']";
 
     //功能按钮
-    //暂时有bug,问答页面有两个编辑器时会有冲突
+    //TODO: 暂时有bug,问答页面有两个编辑器时会有冲突
     if($(toolBarSelector).length > 0){
         var toolBar = $($(toolBarSelector)[0]);
         var isMce = toolBar.hasClass("mce-flow-layout");
