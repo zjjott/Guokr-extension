@@ -30,7 +30,7 @@ var UserHoverBox = {
                 outTimer = setTimeout(function(){
                     box.fadeOut("fast");
                 },800);
-            }).appendTo($(document.body).children(".container"));
+            }).appendTo(getContainerObj());
         }
     },
     //备注改变事件

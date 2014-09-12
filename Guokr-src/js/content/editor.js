@@ -9,7 +9,7 @@ Editor.addFacesBox = function(){
             <ul id="gkr-faces-ul"/>\
         </div>\
     </div>'
-    ).appendTo($(document.body).children(".container"));
+    ).appendTo(getContainerObj());
 }
 
 //表情预览悬浮框
@@ -17,7 +17,7 @@ Editor.addFacesPreviousBox = function(){
     $('<div id="gkr-preview-box">\
         <div id="gkr-preview-div"/>\
     </div>'
-    ).appendTo($(document.body).children(".container"));
+    ).appendTo(getContainerObj());
 }
 
 //颜色选择器悬浮框
@@ -27,7 +27,7 @@ Editor.addColorPicker = function(){
         <div id="gkr-color-div" style="background-color:white; border-color:#2AA4CE; border-style:solid; border-width:1px;height:143px;"/>\
         <div style="background-color:transparent;height:7px"/>\
     </div>'
-    ).appendTo($(document.body).children(".container"));
+    ).appendTo(getContainerObj());
 }
 
 //获取可视化模式文本区域
@@ -82,15 +82,16 @@ function addColor(color) {
 function showPreview(url,currentTarget){
     showPreviewTimer = setTimeout(function(){
         //计算靠左还是靠右显示预览图
-        var previewDivLeft = $("#gkr-faces-box").offset().left;
-        var currentTargetLeft = $(currentTarget).offset().left;
+    	var boxAbsPos = getAbsPos($("#gkr-faces-box")[0]);
+        var previewDivLeft = boxAbsPos.left;
+        var currentTargetLeft = getAbsPos(currentTarget).left;
         var boxWidth = $("#gkr-faces-box").width();
 		var previewWidth = $("#gkr-preview-box").width();
         if(currentTargetLeft - previewDivLeft <  (boxWidth/2)){
 		// 靠右
-            previewDivLeft = previewDivLeft + boxWidth - previewWidth - 2;
+            previewDivLeft = previewDivLeft + boxWidth - previewWidth;
         }
-        $("#gkr-preview-box").show().css("top",$("#gkr-faces-box").offset().top + subdomainOffsetTop + 23).css("left",previewDivLeft + subdomainOffsetLeft).children("#gkr-preview-div").css("background-image","url('" + $.trim(url) + "')");
+        $("#gkr-preview-box").show().css("top",boxAbsPos.top + 23).css("left",previewDivLeft).children("#gkr-preview-div").css("background-image","url('" + $.trim(url) + "')");
     },400);
 }
 function hidePreview(){

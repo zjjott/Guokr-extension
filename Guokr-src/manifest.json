@@ -2,7 +2,7 @@
 
   "name": "Guokr功能扩展",
   "description": "扩展果壳网的表情、果篮收藏功能",
-  "version": "0.3.8",
+  "version": "0.4.1",
   "content_scripts": [
     {
       "matches": ["http://*.guokr.com/*","https://*.guokr.com/*"],
