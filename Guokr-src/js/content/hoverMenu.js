@@ -57,7 +57,7 @@ HoverMenu.addGroupsMenu = function(){
 		showGroupTimer = setTimeout(function(){
 			$("#gkr-groups-menu").show().hide();
 		},400);
-	}).appendTo($(document.body).children(containerSelector));     
+	}).appendTo(getContainerObj());     
 }
 
 //追加小组菜单

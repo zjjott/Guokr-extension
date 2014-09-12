@@ -9,7 +9,7 @@ Editor.addFacesBox = function(){
             <ul id="gkr-faces-ul"/>\
         </div>\
     </div>'
-    ).appendTo($(document.body).children(containerSelector));
+    ).appendTo(getContainerObj());
 }
 
 //表情预览悬浮框
@@ -17,7 +17,7 @@ Editor.addFacesPreviousBox = function(){
     $('<div id="gkr-preview-box">\
         <div id="gkr-preview-div"/>\
     </div>'
-    ).appendTo($(document.body).children(containerSelector));
+    ).appendTo(getContainerObj());
 }
 
 //颜色选择器悬浮框
@@ -27,7 +27,7 @@ Editor.addColorPicker = function(){
         <div id="gkr-color-div" style="background-color:white; border-color:#2AA4CE; border-style:solid; border-width:1px;height:143px;"/>\
         <div style="background-color:transparent;height:7px"/>\
     </div>'
-    ).appendTo($(document.body).children(containerSelector));
+    ).appendTo(getContainerObj());
 }
 
 //获取可视化模式文本区域

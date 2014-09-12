@@ -20,7 +20,7 @@ function domChanged() {
         var strsPlus = strsResult.split(",").concat(blockStrs);
         var idsResult = $await(asyncstore("ids"));
         var idsPlus = idsResult.split(",").concat(blockIDs);
-        $(containerSelector).find("li a,dd a,li * a,dd * a,dl * a").filter(":visible").each(function(){
+        getContainerObj().find("li a,dd a,li * a,dd * a,dl * a").filter(":visible").each(function(){
             var a = $(this);
             var text = a.text();
             $.each(strsPlus,function(i,n){if(n && text.indexOf(n) != -1){a.closest("li,dd,dl").hide();return false;}});
