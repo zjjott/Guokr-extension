@@ -4,7 +4,7 @@
 // A generic onclick callback function.
 
 //开启/关闭日志输出
-var debugMode = true;
+var debugMode = false;
 
 //调试
 function log(info){
