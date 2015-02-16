@@ -1,6 +1,6 @@
 //--------Global variable ------
 //开启/关闭日志输出
-var debugMode = true;
+var debugMode = false;
 // 持久化屏蔽ID列表, e.g. :   var blockIDs	 = ["0792011715","0020566516","0814609355","0637014415"];
 var blockIDs	 = [];
 // 持久化屏蔽关键词列表, e.g. : var blockStrs	 = ["中医","经络","针灸"];
@@ -34,7 +34,16 @@ var colors = ["ffffff","ffccc9","ffce93","fffc9e","ffffc7","9aff99","96fffb","cd
                 "ffc702","32cb00","00d2cb","3166ff","6434fc","656565","9a0000","ce6301","cd9934","999903","009901",
                 "329a9d","3531ff","6200c9","343434","680100","963400","986536","646809","036400","34696d","00009b",
                 "303498","000000","330001","643403","663234","343300","013300","003532","010066","340096"];
+//允许的代码类型,下拉框的值/显示，值会在插入时插成data-lang="xxx"
+var codeType=[{value:"python",name:"Python"},
+{value:'c',name:"C"},
+{value:'c++',name:"C++"},
+{value:'matlab',name:"Matlab"},
+{value:'java',name:"Java"},
+{value:'php',name:"PHP"},
+{value:'javascript',name:"Javascript"},
 
+]
 // 子域名
 var subdomain = "guokr"; // "guokr"表示主站,"mooc"表示MOOC学院,"sex"表示知性社区
 

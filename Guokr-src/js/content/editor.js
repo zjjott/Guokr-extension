@@ -98,3 +98,51 @@ function hidePreview(){
     clearTimeout(showPreviewTimer);
     $("#gkr-preview-box").hide();
 }
+Editor.addCodeBox =function() {
+    var select_string='<select name="codetype">'
+    $.each(codeType,function(index,item) {
+        select_string+="<option value="+item.value+">"+item.name+"</option>"
+    })
+    select_string+='</select>'
+    $('<div id="gkr-code-box" style="display:none">\
+        <s id="triangle" class="arrow-down"/>\
+        <form id="gkr-code-form">\
+        <textarea id="gkr-code-area" rows="10" name="code"></textarea><div class="gkr-code-option">'+select_string+
+        '<input type="checkbox" name="linenos" value="yes"/>行号\
+        <input type="number" name="hl_lines" style="width:30px"/>高亮行\
+        </div><div class="gkr-btn-group">\
+        <a class="gkr-btn" href="javascript:void(0)" id="gkr-code-insert">插入</a>\
+        <a class="gkr-btn" href="javascript:void(0)" id="gkr-code-close">关闭</a>\
+        <a class="gkr-btn gkr-float-right" href="javascript:void(0)" id="gkr-code-clear">清除</a>\
+        </div>\
+        </form></div>').appendTo(getContainerObj());
+};
+function addCode (code,codetype,linenos,hl_lines) {
+    var $view = getViewObject();
+    var codeContent = document.createElement("pre");
+    if(codetype){
+        codeContent.dataset.lang=codetype;
+    }
+    if(linenos=="yes"){
+        codeContent.dataset.linenos="yes";
+    }
+    if(hl_lines){
+        codeContent.dataset.hl_lines=hl_lines;
+    }
+    codeContent.innerText=code;
+    if($view){
+        try{
+            $($view.body).focus();
+            var range = $view.getSelection().getRangeAt(0);
+            range.collapse(false);//行末
+
+            
+            range.insertNode(codeContent);
+        }catch(e){
+            $view.execCommand("unselect");
+            $view.execCommand("mceInsertContent", !1,codeContent)
+        }
+    }
+
+    $("#gkr-faces-box:visible").hide();
+}

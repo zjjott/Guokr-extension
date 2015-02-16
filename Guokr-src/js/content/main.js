@@ -134,6 +134,47 @@ function domChanged() {
         else{
             var moreFaceButton = $("<div tabIndex='999' class='edui-box edui-button'><div class='edui-box edui-icon' style='background-position: 2px 2px;background-repeat: no-repeat;'></div></div>");
         }
+        //好吧，插件没有权限访问外面的tinymce
+        if (isMce) {
+            var addCodeButton = $("<div tabIndex='999'  id='mce_98' class='mce-container mce-flow-layout-item mce-btn' ><div id='mce_98-body' class='mce-ico mce-i-code'></div></div>");
+
+        }
+        else{
+            var addCodeButton = $("<div tabIndex='999' class='edui-box edui-button'><div class='edui-box edui-icon' style='background-position: 2px 2px;background-repeat: no-repeat;'></div></div>");
+        }
+        addCodeButton.click(function(evt) {
+            //关闭其他悬浮框
+            var codeBoxSelector=$("#gkr-code-box");
+            $("#gkr-color-box").hide();
+            $("#gkr-faces-ul").empty();
+            codeBoxSelector.hide();
+            var x=evt.pageX,y=evt.pageY;
+            
+            codeBoxSelector.css('top',y+35);
+            codeBoxSelector.css('left',x-codeBoxSelector.width()/2);
+            var triangle = codeBoxSelector.children("#triangle")
+
+            triangle.css('left',codeBoxSelector.width()/2-8)//减掉自己的宽度
+            triangle.css('top',-3)
+            // codeBoxSelector.children("#triangle").css('top',y-10)
+            codeBoxSelector.show();
+        })
+        $("#gkr-code-close").click(function() {
+            $("#gkr-code-box").hide()
+        });
+        $("#gkr-code-insert").click(function() {
+            var form=$("#gkr-code-form").serializeArray();
+            var formData={};
+            $.each(form,function(index,item) {
+                formData[item.name]=item.value;
+            });
+            addCode(formData.code,formData.codetype,
+                formData.linenos,formData.hl_lines);
+            $("#gkr-code-box").hide()
+        })
+        $("#gkr-code-area")
+        toolBar.append(addCodeButton);
+        
 
         var moreFace = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/eb/smile.gif";
 
@@ -159,6 +200,7 @@ function domChanged() {
             //关闭其他悬浮框
             $("#gkr-color-box").hide();
             $("#gkr-faces-ul").empty();
+            $("#gkr-code-box").hide();
             if($("#gkr-faces-ul:empty").length > 0){
                 moreFaces = Faces.defaultMoreFaces[0].faces;
                 $.each(moreFaces,function(i,n){
@@ -216,6 +258,7 @@ function domChanged() {
                 //关闭其他悬浮框
                 $("#gkr-color-box").hide();
                 $("#gkr-faces-ul").empty();
+                $("#gkr-code-box").hide();
                 if($("#gkr-faces-ul:empty").length > 0){
                     $.each(faces,function(i,n){
                             $("#gkr-faces-ul").append($(facesLi).append($(facesA)
@@ -267,7 +310,6 @@ function domChanged() {
             }
         );
         toolBar.append(moreFaceButton);
-
         //表情分组与切换
         $.each(Faces.defaultMoreFaces,function(i,n){
             $("#gkr-faces-groups-ul").append($(facesGroupLi).append($("<a index='" + i + "' href='javascript:void(0);' style='font-size:12px;color: #0078b6;'>"+ n.name +"</a>").click(function(){
@@ -513,6 +555,7 @@ function domChanged() {
 
         //表情悬浮框
         Editor.addFacesBox();
+        Editor.addCodeBox();
         //表情预览悬浮框
         Editor.addFacesPreviousBox();
         //颜色选择器悬浮框

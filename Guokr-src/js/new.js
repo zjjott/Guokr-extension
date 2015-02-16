@@ -14,7 +14,7 @@ function loadOptions(){
   }
 
 }
-var debug=true;
+var debug=false;
 
 function log(item){
     if(debug)
