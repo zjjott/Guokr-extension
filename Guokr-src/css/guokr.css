@@ -204,7 +204,7 @@ a {
   padding: .35em .625em .75em
 }
 
-#gk-pl-ids > li， #gk-pl-strs > li {
+#gk-pl-ids > li,#gk-pl-strs > li {
   float:left;
 }
 
@@ -212,3 +212,45 @@ a {
   width:16px;
 }
 
+
+#gkr-code-box {
+  font-size:12px;
+  display:none;
+  position:absolute;
+  width:310px;
+  z-index:9999;
+  background: #fff;
+  border:1px solid #85c926;
+}
+.arrow-down {
+    width:0px; height:0px; border:9px solid; border-color:#85c926 transparent transparent transparent;/
+    border-style:solid dashed dashed dashed;
+    position: relative;
+}
+
+#gkr-code-area{
+  width: 98%;
+}
+#gkr-code-area:focus{
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(133,201,38,.6);
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(133,201,38,.6);
+}
+.gkr-code-option,.gkr-btn-group{
+  padding: 5px 0;
+}
+.gkr-btn-group a{
+  color: #FFF;
+  float: left;
+  background-color: #85c926;
+  width: 30px;
+  height: 30px;
+  margin-right:8px;
+  line-height: 2.5;
+  text-align: center;
+}
+.gkr-float-right{
+  float:right!important;
+  margin-right: 0px!important;
+}
